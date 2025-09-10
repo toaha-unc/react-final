@@ -8,8 +8,8 @@ const Hero = () => {
         <div className="hero-content">
           <div className="hero-text">
             <h1 className="hero-title">
-              Connect with the world's best
-              <span className="highlight"> freelancers</span>
+              Connect with the World's Best
+              <span className="highlight"> Freelancers</span>
             </h1>
             <p className="hero-description">
               Find talented professionals for your projects or showcase your skills 

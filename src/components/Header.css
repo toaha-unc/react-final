@@ -17,6 +17,16 @@
   padding: 20px 0;
 }
 
+.logo a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
 .logo h2 {
   font-size: 1.8rem;
   font-weight: 800;
@@ -64,6 +74,112 @@
   gap: 15px;
 }
 
+/* User Menu Styles */
+.user-menu {
+  position: relative;
+}
+
+.user-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 2px solid #000;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #000;
+}
+
+.user-menu-btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.user-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  z-index: 1001;
+  margin-top: 8px;
+}
+
+.user-info {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.user-email {
+  font-weight: 600;
+  color: #000;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.user-role {
+  color: #666;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 12px 15px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #000;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-item.logout {
+  color: #dc3545;
+}
+
+.dropdown-item.logout:hover {
+  background-color: #f8d7da;
+}
+
+.logout-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 5px 0;
+}
+
 .mobile-menu-btn {
   display: none;
   background: none;
@@ -107,6 +223,14 @@
 
   .header-actions {
     display: none;
+  }
+
+  .user-dropdown {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    right: 20px;
+    min-width: auto;
   }
 
   .nav-link {
