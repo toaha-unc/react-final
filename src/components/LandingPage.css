@@ -1,0 +1,37 @@
+.landing-page {
+  min-height: 100vh;
+  background-color: #fff;
+  color: #000;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Section spacing */
+.section {
+  padding: 100px 0;
+}
+
+.section:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* Gradient overlays for visual interest */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.05) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section > * {
+  position: relative;
+  z-index: 2;
+}
