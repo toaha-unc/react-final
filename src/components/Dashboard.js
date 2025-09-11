@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Recommendations from './Recommendations';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -50,11 +51,22 @@ const Dashboard = () => {
                 <div className="card-actions">
                   <button 
                     className="btn btn-primary"
+                    onClick={() => navigate('/seller-dashboard')}
+                  >
+                    Seller Dashboard
+                  </button>
+                  <button 
+                    className="btn btn-secondary"
                     onClick={() => navigate('/services')}
                   >
                     Manage Services
                   </button>
-                  <button className="btn btn-secondary">View Orders</button>
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={() => navigate('/orders')}
+                  >
+                    View Orders
+                  </button>
                 </div>
               </div>
             )}
@@ -70,10 +82,28 @@ const Dashboard = () => {
                   >
                     Browse Services
                   </button>
-                  <button className="btn btn-secondary">My Orders</button>
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={() => navigate('/orders')}
+                  >
+                    My Orders
+                  </button>
                 </div>
               </div>
             )}
+
+            <div className="dashboard-card">
+              <h3>Notifications</h3>
+              <p>Stay updated with order notifications and messages.</p>
+              <div className="card-actions">
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => navigate('/notifications')}
+                >
+                  View Notifications
+                </button>
+              </div>
+            </div>
 
             <div className="dashboard-card">
               <h3>Profile Settings</h3>
@@ -84,6 +114,13 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+
+          {/* Recommendations for buyers */}
+          {isBuyer && (
+            <div className="recommendations-section">
+              <Recommendations />
+            </div>
+          )}
         </div>
       </div>
     </div>

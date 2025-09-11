@@ -7,9 +7,15 @@ import Register from './components/auth/Register';
 import EmailVerification from './components/auth/EmailVerification';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Dashboard from './components/Dashboard';
+import SellerDashboard from './components/SellerDashboard';
 import ServiceList from './components/ServiceList';
 import ServiceForm from './components/ServiceForm';
 import ServiceDetails from './components/ServiceDetails';
+import OrderList from './components/OrderList';
+import OrderDetails from './components/OrderDetails';
+import OrderForm from './components/OrderForm';
+import Notifications from './components/Notifications';
+import Recommendations from './components/Recommendations';
 import './App.css';
 
 // Placeholder component for profile
@@ -89,6 +95,42 @@ const ServicesPage = () => {
   );
 };
 
+// Main Orders component that handles state
+const OrdersPage = () => {
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [editingOrder, setEditingOrder] = useState(null);
+
+  const handleViewOrder = (order) => {
+    setSelectedOrder(order);
+  };
+
+  const handleEditOrder = (order) => {
+    setEditingOrder(order);
+  };
+
+  const handleBackToList = () => {
+    setSelectedOrder(null);
+    setEditingOrder(null);
+  };
+
+  if (selectedOrder) {
+    return (
+      <OrderDetails
+        orderId={selectedOrder.id}
+        onBack={handleBackToList}
+        onEdit={handleEditOrder}
+      />
+    );
+  }
+
+  return (
+    <OrderList
+      onViewOrder={handleViewOrder}
+      onEditOrder={handleEditOrder}
+    />
+  );
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -108,10 +150,42 @@ function App() {
               } 
             />
             <Route 
+              path="/seller-dashboard" 
+              element={
+                <ProtectedRoute>
+                  <SellerDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/services" 
               element={
                 <ProtectedRoute>
                   <ServicesPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/orders" 
+              element={
+                <ProtectedRoute>
+                  <OrdersPage />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/order-form/:serviceId" 
+              element={
+                <ProtectedRoute>
+                  <OrderForm />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/notifications" 
+              element={
+                <ProtectedRoute>
+                  <Notifications />
                 </ProtectedRoute>
               } 
             />

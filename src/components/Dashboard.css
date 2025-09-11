@@ -192,6 +192,13 @@
   }
 }
 
+/* Recommendations Section */
+.recommendations-section {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 2px solid #000;
+}
+
 @media (max-width: 480px) {
   .dashboard-content {
     padding: 0 15px;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { servicesAPI, reviewsAPI, ordersAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import ReviewForm from './ReviewForm';
@@ -6,6 +7,7 @@ import './ServiceDetails.css';
 
 const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
   const { isSeller, user } = useAuth();
+  const navigate = useNavigate();
   const [service, setService] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -95,27 +97,14 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
     return `${Math.ceil(days / 30)} month${Math.ceil(days / 30) > 1 ? 's' : ''}`;
   };
 
-  const handleOrderNow = async () => {
+  const handleOrderNow = () => {
     if (!user) {
       alert('Please login to place an order');
       return;
     }
     
-    try {
-      const orderData = {
-        service: serviceId,
-        quantity: 1,
-        total_amount: service.price,
-        requirements: 'Please provide your project requirements'
-      };
-      
-      const response = await ordersAPI.createOrder(orderData);
-      alert('Order placed successfully! You will be redirected to your orders.');
-      // You could navigate to orders page here
-    } catch (error) {
-      console.error('Error creating order:', error);
-      alert('Failed to place order. Please try again.');
-    }
+    // Navigate to order form
+    navigate(`/order-form/${serviceId}`);
   };
 
   const handleReviewSubmit = async (reviewData) => {
