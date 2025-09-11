@@ -67,6 +67,7 @@ export const reviewsAPI = {
   updateReview: (id, reviewData) => api.put(`/reviews/${id}/update/`, reviewData),
   deleteReview: (id) => api.delete(`/reviews/${id}/delete/`),
   markHelpful: (id) => api.post(`/reviews/${id}/helpful/`),
+  uploadReviewImage: (reviewId, imageData) => api.post(`/reviews/${reviewId}/images/`, imageData),
 };
 
 // Orders API

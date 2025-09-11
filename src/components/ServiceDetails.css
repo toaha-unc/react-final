@@ -255,19 +255,47 @@
 }
 
 .seller-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  padding: 30px;
   background-color: #f8f9fa;
   border-radius: 8px;
   border: 1px solid #e9ecef;
 }
 
+.seller-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .seller-name {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: 700;
   color: #000;
+  margin-bottom: 8px;
+}
+
+.seller-bio {
+  color: #666;
+  line-height: 1.6;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.seller-location {
+  color: #666;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.seller-joined {
+  color: #999;
+  font-size: 0.85rem;
+  font-style: italic;
 }
 
 .seller-stats {
@@ -295,8 +323,120 @@
   letter-spacing: 0.5px;
 }
 
+/* Service Requirements Styles */
+.service-requirements {
+  margin-top: 30px;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.service-requirements h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.requirements-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.requirement-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+}
+
+.requirement-label {
+  font-weight: 600;
+  color: #000;
+  font-size: 0.9rem;
+}
+
+.requirement-value {
+  color: #666;
+  font-size: 0.9rem;
+}
+
 .reviews-content {
   min-height: 300px;
+}
+
+/* Review Form Section */
+.review-form-section {
+  margin-bottom: 40px;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.review-form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.review-form-header h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 8px;
+}
+
+.review-form-header p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Reviews Summary */
+.reviews-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.reviews-summary h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.average-rating {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rating-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+}
+
+.rating-stars {
+  color: #ffc107;
+  font-size: 1.5rem;
+}
+
+.rating-count {
+  color: #666;
+  font-size: 1rem;
 }
 
 .no-reviews {
@@ -319,10 +459,11 @@
 }
 
 .review-item {
-  padding: 20px;
+  padding: 24px;
   border: 1px solid #e9ecef;
   border-radius: 8px;
   background-color: #f8f9fa;
+  margin-bottom: 20px;
 }
 
 .review-header {
@@ -333,6 +474,25 @@
 }
 
 .reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reviewer-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.reviewer-details {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -348,9 +508,32 @@
   font-size: 1.1rem;
 }
 
+.review-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
 .review-date {
   color: #666;
   font-size: 0.9rem;
+}
+
+.helpful-btn {
+  background: none;
+  border: 1px solid #000;
+  color: #000;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.helpful-btn:hover {
+  background-color: #000;
+  color: #fff;
 }
 
 .review-content p {
@@ -363,6 +546,27 @@
   color: #666;
   font-size: 0.9rem;
   font-style: italic;
+}
+
+.review-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.review-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.review-image:hover {
+  transform: scale(1.05);
 }
 
 .service-sidebar {
@@ -396,12 +600,25 @@
   margin-bottom: 24px;
 }
 
+.order-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
 .order-btn {
   width: 100%;
   padding: 16px;
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 24px;
+}
+
+.review-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .order-features {
@@ -411,17 +628,11 @@
 }
 
 .feature {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   font-size: 0.9rem;
   color: #666;
-}
-
-.feature-icon {
-  color: #28a745;
-  font-weight: bold;
-  font-size: 1rem;
+  padding: 4px 0;
+  line-height: 1.4;
+  text-align: center;
 }
 
 /* Responsive Design */
@@ -478,9 +689,8 @@
   }
   
   .seller-info {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
   
   .seller-stats {
@@ -488,8 +698,44 @@
     justify-content: space-around;
   }
   
+  .requirements-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .reviews-summary {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .review-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .review-meta {
+    align-items: flex-start;
+  }
+  
+  .review-images {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  
   .order-card {
     position: static;
+  }
+  
+  .order-actions {
+    gap: 8px;
+  }
+  
+  .review-form-section {
+    padding: 20px;
+  }
+  
+  .service-requirements {
+    padding: 20px;
   }
 }
 
@@ -522,6 +768,34 @@
   
   .owner-actions .btn {
     width: 100%;
+  }
+  
+  .seller-info {
+    padding: 20px;
+  }
+  
+  .service-requirements {
+    padding: 15px;
+  }
+  
+  .review-form-section {
+    padding: 15px;
+  }
+  
+  .reviews-summary {
+    padding: 15px;
+  }
+  
+  .review-item {
+    padding: 15px;
+  }
+  
+  .requirements-content {
+    gap: 12px;
+  }
+  
+  .requirement-item {
+    padding: 10px 12px;
   }
 }
 
