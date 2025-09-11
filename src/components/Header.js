@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon, UserIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../contexts/AuthContext';
@@ -30,10 +30,28 @@ const Header = () => {
     setShowUserMenu(false);
   };
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMenuOpen && !event.target.closest('.nav') && !event.target.closest('.mobile-menu-btn')) {
+        setIsMenuOpen(false);
+      }
+      if (showUserMenu && !event.target.closest('.user-menu')) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen, showUserMenu]);
+
   return (
-    <header className="header">
-      <div className="container">
-        <div className="header-content">
+    <>
+      <header className="header">
+        <div className="container">
+          <div className="header-content">
           <div className="logo">
             <Link to="/" onClick={() => setIsMenuOpen(false)}>
               <h2>FreelanceWork</h2>
@@ -41,11 +59,48 @@ const Header = () => {
           </div>
           
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
-            <a href="#features" className="nav-link" onClick={() => setIsMenuOpen(false)}>Features</a>
-            <a href="#services" className="nav-link" onClick={() => setIsMenuOpen(false)}>Services</a>
-            <a href="#how-it-works" className="nav-link" onClick={() => setIsMenuOpen(false)}>How It Works</a>
-            <a href="#testimonials" className="nav-link" onClick={() => setIsMenuOpen(false)}>Testimonials</a>
-            <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
+            {isAuthenticated ? (
+              <>
+                <button 
+                  className="nav-link"
+                  onClick={() => handleNavigation('/dashboard')}
+                >
+                  Dashboard
+                </button>
+                <button 
+                  className="nav-link"
+                  onClick={() => handleNavigation('/services')}
+                >
+                  Services
+                </button>
+                <button 
+                  className="nav-link"
+                  onClick={() => handleNavigation('/orders')}
+                >
+                  Orders
+                </button>
+                <button 
+                  className="nav-link"
+                  onClick={() => handleNavigation('/profile')}
+                >
+                  Profile
+                </button>
+                <button 
+                  className="nav-link logout"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <a href="#features" className="nav-link" onClick={() => setIsMenuOpen(false)}>Features</a>
+                <a href="#services" className="nav-link" onClick={() => setIsMenuOpen(false)}>Services</a>
+                <a href="#how-it-works" className="nav-link" onClick={() => setIsMenuOpen(false)}>How It Works</a>
+                <a href="#testimonials" className="nav-link" onClick={() => setIsMenuOpen(false)}>Testimonials</a>
+                <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
+              </>
+            )}
           </nav>
 
           <div className="header-actions">
@@ -118,6 +173,10 @@ const Header = () => {
         </div>
       </div>
     </header>
+    
+    {/* Mobile Menu Backdrop */}
+    {isMenuOpen && <div className="mobile-backdrop" onClick={() => setIsMenuOpen(false)}></div>}
+    </>
   );
 };
 

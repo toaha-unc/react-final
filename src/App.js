@@ -8,6 +8,7 @@ import EmailVerification from './components/auth/EmailVerification';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Dashboard from './components/Dashboard';
 import SellerDashboard from './components/SellerDashboard';
+import BuyerDashboard from './components/BuyerDashboard';
 import ServiceList from './components/ServiceList';
 import ServiceForm from './components/ServiceForm';
 import ServiceDetails from './components/ServiceDetails';
@@ -154,6 +155,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <SellerDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/buyer-dashboard" 
+              element={
+                <ProtectedRoute>
+                  <BuyerDashboard />
                 </ProtectedRoute>
               } 
             />

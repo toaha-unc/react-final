@@ -78,6 +78,12 @@ const Dashboard = () => {
                 <div className="card-actions">
                   <button 
                     className="btn btn-primary"
+                    onClick={() => navigate('/buyer-dashboard')}
+                  >
+                    Buyer Dashboard
+                  </button>
+                  <button 
+                    className="btn btn-secondary"
                     onClick={() => navigate('/services')}
                   >
                     Browse Services
