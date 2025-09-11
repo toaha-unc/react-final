@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const { user, isSeller, isBuyer } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="dashboard">
@@ -46,7 +48,12 @@ const Dashboard = () => {
                 <h3>Service Provider Tools</h3>
                 <p>Manage your services, view orders, and track earnings.</p>
                 <div className="card-actions">
-                  <button className="btn btn-primary">Manage Services</button>
+                  <button 
+                    className="btn btn-primary"
+                    onClick={() => navigate('/services')}
+                  >
+                    Manage Services
+                  </button>
                   <button className="btn btn-secondary">View Orders</button>
                 </div>
               </div>
@@ -57,7 +64,12 @@ const Dashboard = () => {
                 <h3>Buyer Tools</h3>
                 <p>Browse services, place orders, and manage your projects.</p>
                 <div className="card-actions">
-                  <button className="btn btn-primary">Browse Services</button>
+                  <button 
+                    className="btn btn-primary"
+                    onClick={() => navigate('/services')}
+                  >
+                    Browse Services
+                  </button>
                   <button className="btn btn-secondary">My Orders</button>
                 </div>
               </div>

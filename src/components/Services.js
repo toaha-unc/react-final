@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { servicesAPI } from '../services/api';
 import './Services.css';
 
 const Services = () => {
+  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -229,7 +231,10 @@ const Services = () => {
                   </li>
                 ))}
               </ul>
-              <button className="service-btn">
+              <button 
+                className="service-btn"
+                onClick={() => navigate('/services')}
+              >
                 Browse Services
                 <ArrowRightIcon className="btn-icon" />
               </button>
@@ -238,7 +243,10 @@ const Services = () => {
         </div>
         
         <div className="services-cta">
-          <button className="view-all-btn">
+          <button 
+            className="view-all-btn"
+            onClick={() => navigate('/services')}
+          >
             View All Services
             <ArrowRightIcon className="btn-icon" />
           </button>

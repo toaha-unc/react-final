@@ -1,0 +1,250 @@
+/* Service List Styles */
+.service-list {
+  min-height: 100vh;
+  background-color: #fff;
+  padding-top: 100px;
+}
+
+.service-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.service-list-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.service-list-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.service-list-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.service-list-stats {
+  margin-bottom: 30px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.service-list-stats p {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.no-services {
+  text-align: center;
+  padding: 80px 20px;
+  background: #f8f9fa;
+  border: 2px solid #000;
+  border-radius: 12px;
+  margin: 40px 0;
+}
+
+.no-services h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 16px;
+}
+
+.no-services p {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.service-list-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+
+.service-list-loading .loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.service-list-loading p {
+  color: #666;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.service-list-error {
+  text-align: center;
+  padding: 80px 20px;
+  background: #fff;
+  border: 2px solid #dc3545;
+  border-radius: 12px;
+  margin: 40px 0;
+}
+
+.service-list-error h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #dc3545;
+  margin-bottom: 16px;
+}
+
+.service-list-error p {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+/* Pagination Styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
+.pagination-btn {
+  padding: 10px 16px;
+  border: 2px solid #000;
+  background-color: #fff;
+  color: #000;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 44px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #000;
+  color: #fff;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-btn.active {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .service-list {
+    padding-top: 80px;
+  }
+  
+  .service-list-header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 0 15px;
+  }
+  
+  .service-list-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .service-list-content {
+    padding: 0 15px;
+  }
+  
+  .services-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .no-services {
+    padding: 60px 20px;
+  }
+  
+  .no-services h3 {
+    font-size: 1.5rem;
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  .pagination-btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    min-width: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-list-header h1 {
+    font-size: 2rem;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .no-services {
+    padding: 40px 15px;
+  }
+  
+  .no-services h3 {
+    font-size: 1.3rem;
+  }
+  
+  .no-services p {
+    font-size: 1rem;
+  }
+  
+  .pagination {
+    gap: 4px;
+  }
+  
+  .pagination-btn {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    min-width: 36px;
+  }
+}
+
+/* Animation for loading spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

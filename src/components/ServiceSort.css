@@ -1,0 +1,104 @@
+/* Service Sort Styles */
+.service-sort {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.sort-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.sort-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.results-count {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.sort-options {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort-select {
+  padding: 10px 16px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: #fff;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: #333;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.sort-select:hover {
+  border-color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .service-sort {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .sort-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .sort-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .sort-options {
+    width: 100%;
+  }
+  
+  .sort-select {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-sort {
+    padding: 12px;
+  }
+  
+  .sort-header h3 {
+    font-size: 1rem;
+  }
+  
+  .sort-select {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
