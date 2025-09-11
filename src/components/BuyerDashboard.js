@@ -5,6 +5,7 @@ import BuyerProfile from './BuyerProfile';
 import BuyerOrders from './BuyerOrders';
 import BuyerReviews from './BuyerReviews';
 import BuyerStats from './BuyerStats';
+import PaymentHistory from './PaymentHistory';
 import './BuyerDashboard.css';
 
 const BuyerDashboard = () => {
@@ -35,6 +36,7 @@ const BuyerDashboard = () => {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'orders', label: 'My Orders', icon: '📦' },
+    { id: 'payments', label: 'Payments', icon: '💳' },
     { id: 'reviews', label: 'My Reviews', icon: '⭐' },
     { id: 'profile', label: 'Profile', icon: '👤' }
   ];
@@ -45,6 +47,8 @@ const BuyerDashboard = () => {
         return <BuyerStats stats={stats} loading={loading} error={error} onRefresh={fetchBuyerStats} />;
       case 'orders':
         return <BuyerOrders />;
+      case 'payments':
+        return <PaymentHistory />;
       case 'reviews':
         return <BuyerReviews />;
       case 'profile':

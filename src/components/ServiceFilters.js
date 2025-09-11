@@ -156,25 +156,25 @@ const ServiceFilters = ({ onFiltersChange, currentFilters }) => {
               className={`quick-filter-btn ${filters.minPrice === '' && filters.maxPrice === '50' ? 'active' : ''}`}
               onClick={() => handleQuickFilter('', '50')}
             >
-              Under $50
+              Under BDT 50
             </button>
             <button
               className={`quick-filter-btn ${filters.minPrice === '50' && filters.maxPrice === '200' ? 'active' : ''}`}
               onClick={() => handleQuickFilter('50', '200')}
             >
-              $50 - $200
+              BDT 50 - BDT 200
             </button>
             <button
               className={`quick-filter-btn ${filters.minPrice === '200' && filters.maxPrice === '500' ? 'active' : ''}`}
               onClick={() => handleQuickFilter('200', '500')}
             >
-              $200 - $500
+              BDT 200 - BDT 500
             </button>
             <button
               className={`quick-filter-btn ${filters.minPrice === '500' && filters.maxPrice === '' ? 'active' : ''}`}
               onClick={() => handleQuickFilter('500', '')}
             >
-              Over $500
+              Over BDT 500
             </button>
           </div>
         </div>

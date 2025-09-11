@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { ordersAPI } from '../services/api';
+import { ordersAPI, paymentAPI } from '../services/api';
 import OrderStatus from './OrderStatus';
+import Payment from './Payment';
 import './OrderDetails.css';
 
 const OrderDetails = ({ orderId, onBack, onEdit }) => {
@@ -14,12 +15,15 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
   const [newMessage, setNewMessage] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [payments, setPayments] = useState([]);
+  const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
     if (orderId) {
       fetchOrderDetails();
       fetchMessages();
       fetchFiles();
+      fetchPayments();
     }
   }, [orderId]);
 
@@ -54,6 +58,16 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
       setFiles(Array.isArray(filesData) ? filesData : []);
     } catch (error) {
       console.error('Error fetching files:', error);
+    }
+  };
+
+  const fetchPayments = async () => {
+    try {
+      const response = await paymentAPI.getPayments({ order: orderId });
+      const paymentsData = response.data?.results || response.data || [];
+      setPayments(Array.isArray(paymentsData) ? paymentsData : []);
+    } catch (error) {
+      console.error('Error fetching payments:', error);
     }
   };
 
@@ -108,12 +122,27 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
   };
 
   const formatPrice = (price) => {
+    // Handle null, undefined, or invalid prices
+    if (price === null || price === undefined || isNaN(price)) {
+      console.warn('Invalid price value:', price);
+      return `BDT ${0}`;
+    }
+    
+    // Convert to number if it's a string
+    const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+    
+    // Check if conversion was successful
+    if (isNaN(numericPrice)) {
+      console.warn('Price could not be converted to number:', price);
+      return `BDT ${0}`;
+    }
+    
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'BDT',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(price);
+    }).format(numericPrice);
   };
 
   const formatDate = (dateString) => {
@@ -149,6 +178,20 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
 
   const isOwner = (isSeller && user?.id === order.seller?.id) || 
                   (isBuyer && user?.id === order.buyer?.id);
+
+  if (showPayment) {
+    return (
+      <Payment
+        order={order}
+        onSuccess={() => {
+          setShowPayment(false);
+          fetchOrderDetails();
+          fetchPayments();
+        }}
+        onCancel={() => setShowPayment(false)}
+      />
+    );
+  }
 
   return (
     <div className="order-details">
@@ -255,6 +298,48 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
             </div>
           )}
 
+          {isSeller && order.buyer_name && (
+            <div className="buyer-contact-section">
+              <h3>Buyer Contact Information</h3>
+              <div className="contact-info-grid">
+                <div className="contact-item">
+                  <span className="contact-label">Full Name:</span>
+                  <span className="contact-value">{order.buyer_name}</span>
+                </div>
+                {order.buyer_phone && (
+                  <div className="contact-item">
+                    <span className="contact-label">Phone:</span>
+                    <span className="contact-value">{order.buyer_phone}</span>
+                  </div>
+                )}
+                {order.buyer_address && (
+                  <div className="contact-item">
+                    <span className="contact-label">Address:</span>
+                    <span className="contact-value">{order.buyer_address}</span>
+                  </div>
+                )}
+                {order.buyer_city && (
+                  <div className="contact-item">
+                    <span className="contact-label">City:</span>
+                    <span className="contact-value">{order.buyer_city}</span>
+                  </div>
+                )}
+                {order.buyer_country && (
+                  <div className="contact-item">
+                    <span className="contact-label">Country:</span>
+                    <span className="contact-value">{order.buyer_country}</span>
+                  </div>
+                )}
+                {order.buyer_postal_code && (
+                  <div className="contact-item">
+                    <span className="contact-label">Postal Code:</span>
+                    <span className="contact-value">{order.buyer_postal_code}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="communication-section">
             <h3>Communication</h3>
             
@@ -303,6 +388,43 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
                 </button>
               </div>
             </form>
+          </div>
+
+          <div className="payment-section">
+            <h3>Payment Information</h3>
+            
+            {!order.is_paid && isBuyer && (
+              <div className="payment-actions">
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => setShowPayment(true)}
+                >
+                  Pay Now
+                </button>
+              </div>
+            )}
+
+            {payments.length === 0 ? (
+              <div className="no-payments">
+                <p>No payments found for this order.</p>
+              </div>
+            ) : (
+              <div className="payments-list">
+                {payments.map((payment) => (
+                  <div key={payment.id} className="payment-item">
+                    <div className="payment-info">
+                      <div className="payment-id">Payment #{payment.payment_id}</div>
+                      <div className="payment-amount">{formatPrice(payment.amount)}</div>
+                      <div className="payment-method">{payment.payment_method}</div>
+                      <div className={`payment-status status-${payment.status}`}>
+                        {payment.status_display}
+                      </div>
+                      <div className="payment-date">{formatDate(payment.created_at)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="files-section">

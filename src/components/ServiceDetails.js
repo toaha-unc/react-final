@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { servicesAPI, reviewsAPI, ordersAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import { formatPrice, formatDate } from '../utils/formatting';
 import ReviewForm from './ReviewForm';
 import './ServiceDetails.css';
 
@@ -80,15 +81,6 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
       checkUserOrderStatus();
     }
   }, [serviceId, fetchServiceDetails, fetchReviews, checkUserOrderStatus]);
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
 
   const formatDeliveryTime = (days) => {
     if (days === 1) return '1 day';

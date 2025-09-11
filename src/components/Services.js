@@ -18,7 +18,7 @@ const Services = () => {
         
         // First try to test if API is reachable
         try {
-          const testResponse = await fetch('https://django-final.vercel.app/api/test-simple/');
+          const testResponse = await fetch('http://localhost:8000/api/test-simple/');
           console.log('API test response:', testResponse);
         } catch (testErr) {
           console.log('API test failed:', testErr);
@@ -152,7 +152,7 @@ const Services = () => {
 
   const formatPrice = (price) => {
     if (typeof price === 'number') {
-      return `Starting at $${price}`;
+      return `Starting at BDT ${price}`;
     }
     return price;
   };

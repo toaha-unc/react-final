@@ -109,12 +109,27 @@ const SellerOrders = () => {
   };
 
   const formatPrice = (price) => {
+    // Handle null, undefined, or invalid prices
+    if (price === null || price === undefined || isNaN(price)) {
+      console.warn('Invalid price value:', price);
+      return `BDT ${0}`;
+    }
+    
+    // Convert to number if it's a string
+    const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+    
+    // Check if conversion was successful
+    if (isNaN(numericPrice)) {
+      console.warn('Price could not be converted to number:', price);
+      return `BDT ${0}`;
+    }
+    
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'BDT',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(price);
+    }).format(numericPrice);
   };
 
   const formatDate = (dateString) => {

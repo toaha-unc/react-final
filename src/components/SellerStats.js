@@ -3,12 +3,27 @@ import './SellerStats.css';
 
 const SellerStats = ({ stats, earnings, analytics, loading, error, onRefresh }) => {
   const formatCurrency = (amount) => {
+    // Handle null, undefined, or invalid amounts
+    if (amount === null || amount === undefined || isNaN(amount)) {
+      console.warn('Invalid amount value:', amount);
+      return `BDT ${0}`;
+    }
+    
+    // Convert to number if it's a string
+    const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    
+    // Check if conversion was successful
+    if (isNaN(numericAmount)) {
+      console.warn('Amount could not be converted to number:', amount);
+      return `BDT ${0}`;
+    }
+    
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'BDT',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(amount || 0);
+    }).format(numericAmount);
   };
 
   const formatNumber = (num) => {
@@ -208,7 +223,7 @@ const SellerStats = ({ stats, earnings, analytics, loading, error, onRefresh }) 
           <div className="activity-item">
             <div className="activity-icon">💰</div>
             <div className="activity-content">
-              <p><strong>Payment received</strong> - $500 for completed order</p>
+              <p><strong>Payment received</strong> - BDT 500 for completed order</p>
               <span className="activity-time">3 days ago</span>
             </div>
           </div>

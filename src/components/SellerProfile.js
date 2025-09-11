@@ -378,7 +378,7 @@ const SellerProfile = () => {
       <h3>Work Preferences</h3>
       <div className="form-grid">
         <div className="form-group">
-          <label htmlFor="hourly_rate">Hourly Rate ($)</label>
+          <label htmlFor="hourly_rate">Hourly Rate (BDT)</label>
           <input
             type="number"
             id="hourly_rate"

@@ -191,6 +191,10 @@ function App() {
               } 
             />
             <Route 
+              path="/test-order/:serviceId" 
+              element={<OrderForm />} 
+            />
+            <Route 
               path="/notifications" 
               element={
                 <ProtectedRoute>

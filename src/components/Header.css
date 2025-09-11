@@ -1,3 +1,4 @@
+/* Header Styles */
 .header {
   position: fixed;
   top: 0;
@@ -15,6 +16,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 0;
+  position: relative;
 }
 
 .logo a {
@@ -201,6 +203,7 @@
   padding: 8px;
   color: #000;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .mobile-menu-btn:hover {
@@ -224,14 +227,21 @@
   display: none;
 }
 
-@media (max-width: 768px) {
-  .mobile-backdrop {
-    display: block;
-  }
-}
-
 /* Mobile Styles */
 @media (max-width: 768px) {
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .header-content {
+    flex-wrap: nowrap;
+    gap: 15px;
+  }
+
   .nav {
     position: fixed;
     top: 100%;
@@ -247,6 +257,8 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 999;
     border-top: 2px solid #000;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
   }
 
   .nav-open {
@@ -301,5 +313,28 @@
     margin-left: -10px;
     margin-right: -10px;
     border-radius: 8px;
+  }
+
+  .mobile-backdrop {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 15px 0;
+  }
+
+  .logo h2 {
+    font-size: 1.5rem;
+  }
+
+  .mobile-menu-btn {
+    padding: 6px;
+  }
+
+  .mobile-menu-btn svg {
+    width: 20px;
+    height: 20px;
   }
 }

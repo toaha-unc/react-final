@@ -57,7 +57,7 @@ const Hero = () => {
                   <span className="tag">UI/UX</span>
                   <span className="tag">Figma</span>
                 </div>
-                <div className="card-price">$2,500</div>
+                <div className="card-price">BDT 2,500</div>
               </div>
             </div>
           </div>

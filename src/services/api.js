@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://django-final.vercel.app/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -32,7 +32,9 @@ api.interceptors.response.use(
       // Token expired or invalid
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
-      window.location.href = '/login';
+      localStorage.removeItem('user_data');
+      // Don't redirect to login for API calls that should work without auth
+      // window.location.href = '/login';
     }
     return Promise.reject(error);
   }
@@ -52,7 +54,14 @@ export const authAPI = {
 export const servicesAPI = {
   getCategories: () => api.get('/categories/'),
   getServices: (params) => api.get('/services/', { params }),
-  getService: (id) => api.get(`/services/${id}/`),
+  getService: (id) => {
+    // Create a request without authentication for public service details
+    return axios.get(`${API_BASE_URL}/services/${id}/`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  },
   createService: (serviceData) => api.post('/services/create/', serviceData),
   updateService: (id, serviceData) => api.put(`/services/${id}/update/`, serviceData),
   deleteService: (id) => api.delete(`/services/${id}/delete/`),
@@ -113,6 +122,21 @@ export const notificationsAPI = {
 export const statsAPI = {
   getServiceStats: () => api.get('/stats/'),
   getOrderStats: () => api.get('/order-stats/'),
+};
+
+// Payment API
+export const paymentAPI = {
+  getPayments: (params) => api.get('/payments/', { params }),
+  getPayment: (id) => api.get(`/payments/${id}/`),
+  createPayment: (paymentData) => api.post('/payments/create/', paymentData),
+  getPaymentStats: () => api.get('/payments/stats/'),
+  getPaymentMethods: () => api.get('/payments/methods/'),
+  createPaymentMethod: (methodData) => api.post('/payments/methods/', methodData),
+  updatePaymentMethod: (id, methodData) => api.put(`/payments/methods/${id}/`, methodData),
+  deletePaymentMethod: (id) => api.delete(`/payments/methods/${id}/`),
+  initiatePayment: (orderId) => api.post(`/payments/initiate/${orderId}/`),
+  getSSLCommerzMethods: (paymentId) => api.get(`/payments/${paymentId}/methods/`),
+  createRefund: (paymentId, refundData) => api.post(`/payments/${paymentId}/refund/`, refundData),
 };
 
 export default api;

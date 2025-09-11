@@ -6,6 +6,7 @@ import SellerServices from './SellerServices';
 import SellerOrders from './SellerOrders';
 import SellerReviews from './SellerReviews';
 import SellerProfile from './SellerProfile';
+import PaymentHistory from './PaymentHistory';
 import './SellerDashboard.css';
 
 const SellerDashboard = () => {
@@ -54,6 +55,7 @@ const SellerDashboard = () => {
     { id: 'services', label: 'My Services', icon: '🛠️' },
     { id: 'orders', label: 'Orders', icon: '📦' },
     { id: 'reviews', label: 'Reviews', icon: '⭐' },
+    { id: 'payments', label: 'Payments', icon: '💳' },
     { id: 'profile', label: 'Profile', icon: '👤' }
   ];
 
@@ -76,6 +78,8 @@ const SellerDashboard = () => {
         return <SellerOrders />;
       case 'reviews':
         return <SellerReviews />;
+      case 'payments':
+        return <PaymentHistory />;
       case 'profile':
         return <SellerProfile />;
       default:
