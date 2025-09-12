@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://django-final.vercel.app/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -55,18 +55,15 @@ export const servicesAPI = {
   getCategories: () => api.get('/categories/'),
   getServices: (params) => api.get('/services/', { params }),
   getService: (id) => {
-    // Create a request without authentication for public service details
-    return axios.get(`${API_BASE_URL}/services/${id}/`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    // Use authenticated API for sellers to view their own services
+    return api.get(`/services/${id}/`);
   },
   createService: (serviceData) => api.post('/services/create/', serviceData),
   updateService: (id, serviceData) => api.put(`/services/${id}/update/`, serviceData),
   deleteService: (id) => api.delete(`/services/${id}/delete/`),
   getFeaturedServices: () => api.get('/services/?featured=true'),
   getServiceStats: (id) => api.get(`/services/${id}/stats/`),
+  getSellerServices: (params) => api.get('/seller/services/', { params }),
 };
 
 // Reviews API
@@ -77,6 +74,8 @@ export const reviewsAPI = {
   deleteReview: (id) => api.delete(`/reviews/${id}/delete/`),
   markHelpful: (id) => api.post(`/reviews/${id}/helpful/`),
   uploadReviewImage: (reviewId, imageData) => api.post(`/reviews/${reviewId}/images/`, imageData),
+  getBuyerReviews: () => api.get('/buyer/review-history/'),
+  getSellerReviews: (sellerId) => api.get(`/sellers/${sellerId}/reviews/`),
 };
 
 // Orders API
@@ -113,9 +112,9 @@ export const dashboardAPI = {
 
 // Notifications API
 export const notificationsAPI = {
-  getNotifications: () => api.get('/notifications/'),
-  markAsRead: (id) => api.post(`/notifications/${id}/mark-read/`),
-  markAllAsRead: () => api.post('/notifications/mark-all-read/'),
+  getNotifications: (params) => api.get('/notifications/', { params }),
+  markAsRead: (id) => api.patch(`/notifications/${id}/mark-read/`),
+  markAllAsRead: () => api.patch('/notifications/mark-all-read/'),
 };
 
 // Statistics API

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import Header from '../Header';
 import './Auth.css';
 
 const EmailVerification = () => {
@@ -137,9 +138,12 @@ const EmailVerification = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        {renderContent()}
+    <div className="auth-page">
+      <Header />
+      <div className="auth-container">
+        <div className="auth-card">
+          {renderContent()}
+        </div>
       </div>
     </div>
   );

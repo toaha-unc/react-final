@@ -148,7 +148,7 @@ const Payment = ({ order, onSuccess, onCancel }) => {
   // Test order data API call
   const testOrderData = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/orders/${order.id}/test-data/`, {
+      const response = await fetch(`https://django-final.vercel.app/api/orders/${order.id}/test-data/`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'

@@ -13,6 +13,13 @@ const BuyerOrders = () => {
   const [sortBy, setSortBy] = useState('created_at');
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+  const scrollToServices = () => {
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     fetchOrders();
   }, [filter, sortBy]);
@@ -222,7 +229,7 @@ const BuyerOrders = () => {
   return (
     <div className="buyer-orders">
       <div className="orders-header">
-        <h2>My Orders</h2>
+        <h2>Order History</h2>
         <p>Track and manage your service orders</p>
       </div>
 
@@ -271,7 +278,7 @@ const BuyerOrders = () => {
           </p>
           <button 
             className="btn btn-primary"
-            onClick={() => window.location.href = '/services'}
+            onClick={scrollToServices}
           >
             Browse Services
           </button>
@@ -335,21 +342,21 @@ const BuyerOrders = () => {
                     <p className="requirements-text">{order.requirements}</p>
                   </div>
                 )}
-              </div>
 
-              <div className="order-card-actions">
-                <button 
-                  className="btn btn-primary"
-                  onClick={() => handleViewOrder(order)}
-                >
-                  View Details
-                </button>
-                <button 
-                  className="btn btn-secondary"
-                  onClick={() => window.location.href = `/services/${order.service?.id}`}
-                >
-                  View Service
-                </button>
+                <div className="order-card-actions">
+                  <button 
+                    className="btn btn-primary"
+                    onClick={() => handleViewOrder(order)}
+                  >
+                    View Details
+                  </button>
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={() => window.location.href = `/services/${order.service?.id}`}
+                  >
+                    View Service
+                  </button>
+                </div>
               </div>
             </div>
           ))}

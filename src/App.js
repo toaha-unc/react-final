@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LandingPage from './components/LandingPage';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
@@ -15,17 +15,34 @@ import ServiceDetails from './components/ServiceDetails';
 import OrderList from './components/OrderList';
 import OrderDetails from './components/OrderDetails';
 import OrderForm from './components/OrderForm';
+import Orders from './components/Orders';
 import Notifications from './components/Notifications';
 import Recommendations from './components/Recommendations';
+import BuyerProfile from './components/BuyerProfile';
+import SellerProfile from './components/SellerProfile';
+import Reviews from './components/Reviews';
 import './App.css';
 
-// Placeholder component for profile
-const Profile = () => (
-  <div className="container" style={{ paddingTop: '100px', minHeight: '100vh' }}>
-    <h1>Profile</h1>
-    <p>Manage your profile settings here.</p>
-  </div>
-);
+// Profile component that shows appropriate profile based on user role
+const Profile = () => {
+  const { isBuyer, isSeller } = useAuth();
+  
+  if (isBuyer) {
+    return <BuyerProfile />;
+  }
+  
+  if (isSeller) {
+    return <SellerProfile />;
+  }
+  
+  // Fallback for users without a specific role
+  return (
+    <div className="container" style={{ paddingTop: '100px', minHeight: '100vh' }}>
+      <h1>Profile</h1>
+      <p>Manage your profile settings here.</p>
+    </div>
+  );
+};
 
 // Main Services component that handles state
 const ServicesPage = () => {
@@ -178,7 +195,7 @@ function App() {
               path="/orders" 
               element={
                 <ProtectedRoute>
-                  <OrdersPage />
+                  <Orders />
                 </ProtectedRoute>
               } 
             />
@@ -207,6 +224,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/reviews" 
+              element={
+                <ProtectedRoute>
+                  <Reviews />
                 </ProtectedRoute>
               } 
             />

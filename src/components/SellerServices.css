@@ -143,9 +143,15 @@
 }
 
 .service-category {
-  font-size: 0.9rem;
-  color: #666;
-  font-weight: 500;
+  background-color: #000;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
 }
 
 .service-status {

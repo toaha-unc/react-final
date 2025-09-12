@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { profileAPI } from '../services/api';
+import Header from './Header';
 import './BuyerProfile.css';
 
 const BuyerProfile = () => {
@@ -156,7 +157,9 @@ const BuyerProfile = () => {
 
   return (
     <div className="buyer-profile">
-      <div className="profile-header">
+      <Header />
+      <div className="container">
+        <div className="profile-header">
         <div className="profile-avatar">
           <div className="avatar-circle">
             {formData.first_name?.charAt(0)?.toUpperCase() || user?.first_name?.charAt(0)?.toUpperCase() || 'B'}
@@ -392,6 +395,7 @@ const BuyerProfile = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

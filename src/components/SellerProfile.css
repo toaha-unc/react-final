@@ -1,27 +1,36 @@
-/* Seller Profile Styles */
+/* Seller Profile Styles - Matching Services Page */
+.seller-profile-page {
+  min-height: 100vh;
+  background-color: #fff;
+  padding-top: 100px;
+}
+
 .seller-profile {
-  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #000;
+  margin-bottom: 40px;
+  padding: 0 0 20px 0;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .header-content h2 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
   color: #000;
-  margin-bottom: 5px;
+  margin: 0;
 }
 
 .header-content p {
   font-size: 1.1rem;
   color: #666;
+  margin: 8px 0 0 0;
 }
 
 .profile-actions {
@@ -30,38 +39,42 @@
 }
 
 .profile-error {
-  background: #f8d7da;
-  border: 2px solid #dc3545;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 30px;
   text-align: center;
+  padding: 20px;
+  background: #fff;
+  border: 2px solid #dc3545;
+  border-radius: 12px;
+  margin: 20px 0;
 }
 
 .profile-error p {
-  color: #721c24;
+  color: #dc3545;
+  font-size: 1.1rem;
   margin: 0;
+  font-weight: 500;
 }
 
 .profile-success {
-  background: #d4edda;
-  border: 2px solid #28a745;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 30px;
   text-align: center;
+  padding: 20px;
+  background: #fff;
+  border: 2px solid #28a745;
+  border-radius: 12px;
+  margin: 20px 0;
 }
 
 .profile-success p {
-  color: #155724;
+  color: #28a745;
+  font-size: 1.1rem;
   margin: 0;
   font-weight: 500;
 }
 
 .profile-content {
   display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 40px;
+  grid-template-columns: 280px 1fr;
+  gap: 30px;
+  margin-top: 20px;
 }
 
 .profile-sidebar {
@@ -127,6 +140,7 @@
 
 .profile-form {
   width: 100%;
+  max-width: 800px;
 }
 
 .profile-section {
@@ -202,19 +216,19 @@
   font-style: italic;
 }
 
-/* Loading State */
+/* Loading State - Matching Services Page */
 .seller-profile-loading {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
-  text-align: center;
+  background-color: #fff;
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border: 4px solid #f3f3f3;
   border-top: 4px solid #000;
   border-radius: 50%;
@@ -229,30 +243,29 @@
 
 .seller-profile-loading p {
   color: #666;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .profile-content {
-    grid-template-columns: 200px 1fr;
-    gap: 30px;
+/* Responsive Design - Matching Services Page */
+@media (max-width: 768px) {
+  .seller-profile-page {
+    padding-top: 80px;
   }
   
-  .profile-sidebar {
-    position: static;
+  .seller-profile {
+    padding: 0 15px;
   }
-}
-
-@media (max-width: 768px) {
+  
   .profile-header {
     flex-direction: column;
     gap: 20px;
     align-items: flex-start;
+    padding: 0 0 20px 0;
   }
   
-  .header-content h2 {
-    font-size: 2rem;
+  .profile-header h2 {
+    font-size: 2.5rem;
   }
   
   .profile-content {
@@ -262,6 +275,7 @@
   
   .profile-sidebar {
     order: 2;
+    position: static;
   }
   
   .profile-main {
@@ -271,21 +285,21 @@
   
   .profile-nav {
     flex-direction: row;
-    overflow-x: auto;
-    gap: 0;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   
   .profile-nav .nav-item {
-    white-space: nowrap;
-    border-left: none;
-    border-bottom: 3px solid transparent;
+    flex: 1;
     min-width: 120px;
     justify-content: center;
+    border-left: none;
+    border-bottom: 3px solid transparent;
   }
   
   .profile-nav .nav-item.active {
     border-left: none;
-    border-bottom-color: #000;
+    border-bottom: 3px solid #000;
   }
   
   .form-grid {

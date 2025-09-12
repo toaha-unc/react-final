@@ -57,7 +57,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: 0.5rem 1rem;
   border-bottom: 1px solid #e9ecef;
 }
 
@@ -69,7 +69,6 @@
   font-weight: 600;
   font-size: 1.1rem;
   padding-top: 1rem;
-  border-top: 2px solid #000000;
   border-bottom: none;
 }
 
@@ -283,7 +282,8 @@
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #f8f9fa;
+  background: #000;
+  color: #fff;
 }
 
 .payment-error {

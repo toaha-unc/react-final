@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { dashboardAPI } from '../services/api';
+import Header from './Header';
 import BuyerProfile from './BuyerProfile';
-import BuyerOrders from './BuyerOrders';
 import BuyerReviews from './BuyerReviews';
 import BuyerStats from './BuyerStats';
 import PaymentHistory from './PaymentHistory';
@@ -35,7 +35,6 @@ const BuyerDashboard = () => {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'orders', label: 'My Orders', icon: '📦' },
     { id: 'payments', label: 'Payments', icon: '💳' },
     { id: 'reviews', label: 'My Reviews', icon: '⭐' },
     { id: 'profile', label: 'Profile', icon: '👤' }
@@ -45,8 +44,6 @@ const BuyerDashboard = () => {
     switch (activeTab) {
       case 'overview':
         return <BuyerStats stats={stats} loading={loading} error={error} onRefresh={fetchBuyerStats} />;
-      case 'orders':
-        return <BuyerOrders />;
       case 'payments':
         return <PaymentHistory />;
       case 'reviews':
@@ -69,6 +66,7 @@ const BuyerDashboard = () => {
 
   return (
     <div className="buyer-dashboard">
+      <Header />
       <div className="buyer-dashboard-header">
         <div className="container">
           <div className="header-content">

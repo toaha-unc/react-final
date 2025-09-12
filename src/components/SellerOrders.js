@@ -357,37 +357,37 @@ const SellerOrders = () => {
                     <p className="requirements-text">{order.requirements}</p>
                   </div>
                 )}
-              </div>
 
-              <div className="order-card-actions">
-                <button 
-                  className="btn btn-primary"
-                  onClick={() => handleViewOrder(order)}
-                >
-                  View Details
-                </button>
-                <button 
-                  className="btn btn-secondary"
-                  onClick={() => {/* Handle message buyer */}}
-                >
-                  Message Buyer
-                </button>
-                {order.status === 'pending' && (
+                <div className="order-card-actions">
                   <button 
-                    className="btn btn-success"
-                    onClick={() => handleStatusChange(order.id, 'in_progress')}
+                    className="btn btn-primary"
+                    onClick={() => handleViewOrder(order)}
                   >
-                    Start Work
+                    View Details
                   </button>
-                )}
-                {order.status === 'in_progress' && (
                   <button 
-                    className="btn btn-success"
-                    onClick={() => handleStatusChange(order.id, 'completed')}
+                    className="btn btn-secondary"
+                    onClick={() => {/* Handle message buyer */}}
                   >
-                    Mark Complete
+                    Message Buyer
                   </button>
-                )}
+                  {order.status === 'pending' && (
+                    <button 
+                      className="btn btn-success"
+                      onClick={() => handleStatusChange(order.id, 'in_progress')}
+                    >
+                      Start Work
+                    </button>
+                  )}
+                  {order.status === 'in_progress' && (
+                    <button 
+                      className="btn btn-success"
+                      onClick={() => handleStatusChange(order.id, 'completed')}
+                    >
+                      Mark Complete
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}

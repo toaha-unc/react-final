@@ -30,6 +30,16 @@ const Header = () => {
     setShowUserMenu(false);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    navigate('/');
+    scrollToTop();
+  };
+
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -53,9 +63,9 @@ const Header = () => {
         <div className="container">
           <div className="header-content">
             <div className="logo">
-              <Link to="/" onClick={() => setIsMenuOpen(false)}>
+              <button onClick={handleLogoClick} className="logo-btn">
                 <h2>FreelanceWork</h2>
-              </Link>
+              </button>
             </div>
             
             <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
@@ -81,6 +91,12 @@ const Header = () => {
                   </button>
                   <button 
                     className="nav-link"
+                    onClick={() => handleNavigation('/reviews')}
+                  >
+                    Reviews
+                  </button>
+                  <button 
+                    className="nav-link"
                     onClick={() => handleNavigation('/profile')}
                   >
                     Profile
@@ -98,7 +114,6 @@ const Header = () => {
                   <a href="#services" className="nav-link" onClick={() => setIsMenuOpen(false)}>Services</a>
                   <a href="#how-it-works" className="nav-link" onClick={() => setIsMenuOpen(false)}>How It Works</a>
                   <a href="#testimonials" className="nav-link" onClick={() => setIsMenuOpen(false)}>Testimonials</a>
-                  <a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>Contact</a>
                 </>
               )}
             </nav>
@@ -134,6 +149,12 @@ const Header = () => {
                       </button>
                       <button 
                         className="dropdown-item"
+                        onClick={() => handleNavigation('/reviews')}
+                      >
+                        Reviews
+                      </button>
+                      <button 
+                        className="dropdown-item"
                         onClick={() => handleNavigation('/profile')}
                       >
                         Profile
@@ -161,7 +182,7 @@ const Header = () => {
                     className="btn btn-primary"
                     onClick={() => handleNavigation('/register')}
                   >
-                    Get Started
+                    Sign Up
                   </button>
                 </>
               )}

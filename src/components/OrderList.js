@@ -109,179 +109,189 @@ const OrderList = ({ onViewOrder, onEditOrder }) => {
 
   if (loading) {
     return (
-      <div className="order-list-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading orders...</p>
+      <div className="order-list">
+        <div className="container">
+          <div className="order-list-loading">
+            <div className="loading-spinner"></div>
+            <p>Loading orders...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="order-list-error">
-        <h3>Error Loading Orders</h3>
-        <p>{error}</p>
-        <button className="btn btn-primary" onClick={fetchOrders}>
-          Try Again
-        </button>
+      <div className="order-list">
+        <div className="container">
+          <div className="order-list-error">
+            <h3>Error Loading Orders</h3>
+            <p>{error}</p>
+            <button className="btn btn-primary" onClick={fetchOrders}>
+              Try Again
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="order-list">
-      <div className="order-list-header">
-        <h1>
-          {isSeller ? 'Orders Received' : 'My Orders'}
-        </h1>
-        <p>
-          {isSeller 
-            ? 'Manage orders for your services' 
-            : 'Track your order history and status'
-          }
-        </p>
-      </div>
-
-      <div className="order-filters">
-        <div className="filter-group">
-          <label htmlFor="status-filter">Filter by Status:</label>
-          <select
-            id="status-filter"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="all">All Orders</option>
-            <option value="pending">Pending</option>
-            <option value="in_progress">In Progress</option>
-            <option value="completed">Completed</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <label htmlFor="sort-filter">Sort by:</label>
-          <select
-            id="sort-filter"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="filter-select"
-          >
-            <option value="created_at">Date Created</option>
-            <option value="total_amount">Price</option>
-            <option value="status">Status</option>
-          </select>
-        </div>
-      </div>
-
-      {orders.length === 0 ? (
-        <div className="no-orders">
-          <h3>No Orders Found</h3>
+      <div className="container">
+        <div className="order-list-header">
+          <h1>
+            {isSeller ? 'Orders Received' : 'Order History'}
+          </h1>
           <p>
-            {filter === 'all' 
-              ? 'You haven\'t placed any orders yet.' 
-              : `No orders found with status: ${filter}`
+            {isSeller 
+              ? 'Manage orders for your services' 
+              : 'Track your order history and status'
             }
           </p>
-          {isBuyer && (
-            <button 
-              className="btn btn-primary"
-              onClick={() => window.location.href = '/services'}
+        </div>
+
+        <div className="order-filters">
+          <div className="filter-group">
+            <label htmlFor="status-filter">Filter by Status:</label>
+            <select
+              id="status-filter"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="filter-select"
             >
-              Browse Services
-            </button>
-          )}
-        </div>
-      ) : (
-        <div className="orders-grid">
-          {orders.map((order) => (
-            <div key={order.id} className="order-card">
-              <div className="order-card-header">
-                <div className="order-info">
-                  <h3 className="order-title">
-                    {order.service?.title || 'Service Order'}
-                  </h3>
-                  <p className="order-id">Order #{order.id}</p>
-                </div>
-                <div className="order-status">
-                  <OrderStatus 
-                    status={order.status} 
-                    onStatusChange={(newStatus) => handleStatusChange(order.id, newStatus)}
-                    canEdit={isSeller}
-                  />
-                </div>
-              </div>
+              <option value="all">All Orders</option>
+              <option value="pending">Pending</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
 
-              <div className="order-card-content">
-                <div className="order-details">
-                  <div className="detail-item">
-                    <span className="detail-label">Price:</span>
-                    <span className="detail-value">{formatPrice(order.total_amount)}</span>
+          <div className="filter-group">
+            <label htmlFor="sort-filter">Sort by:</label>
+            <select
+              id="sort-filter"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="filter-select"
+            >
+              <option value="created_at">Date Created</option>
+              <option value="total_amount">Price</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+        </div>
+
+        {orders.length === 0 ? (
+          <div className="no-orders">
+            <h3>No Orders Found</h3>
+            <p>
+              {filter === 'all' 
+                ? 'You haven\'t placed any orders yet.' 
+                : `No orders found with status: ${filter}`
+              }
+            </p>
+            {isBuyer && (
+              <button 
+                className="btn btn-primary"
+                onClick={() => window.location.href = '/services'}
+              >
+                Browse Services
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="orders-grid">
+            {orders.map((order) => (
+              <div key={order.id} className="order-card">
+                <div className="order-card-header">
+                  <div className="order-info">
+                    <h3 className="order-title">
+                      {order.service?.title || 'Service Order'}
+                    </h3>
+                    <p className="order-id">Order #{order.id}</p>
                   </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Quantity:</span>
-                    <span className="detail-value">{order.quantity}</span>
+                  <div className="order-status">
+                    <OrderStatus 
+                      status={order.status} 
+                      onStatusChange={(newStatus) => handleStatusChange(order.id, newStatus)}
+                      canEdit={isSeller}
+                    />
                   </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Ordered:</span>
-                    <span className="detail-value">{formatDate(order.created_at)}</span>
-                  </div>
-                  {order.delivery_date && (
+                </div>
+
+                <div className="order-card-content">
+                  <div className="order-details">
                     <div className="detail-item">
-                      <span className="detail-label">Delivery:</span>
-                      <span className="detail-value">{formatDate(order.delivery_date)}</span>
+                      <span className="detail-label">Price:</span>
+                      <span className="detail-value">{formatPrice(order.total_amount)}</span>
                     </div>
-                  )}
-                </div>
-
-                <div className="order-parties">
-                  {isSeller && order.buyer && (
-                    <div className="party-info">
-                      <span className="party-label">Buyer:</span>
-                      <span className="party-name">
-                        {order.buyer.first_name} {order.buyer.last_name}
-                      </span>
+                    <div className="detail-item">
+                      <span className="detail-label">Quantity:</span>
+                      <span className="detail-value">{order.quantity}</span>
                     </div>
-                  )}
-                  {isBuyer && order.seller && (
-                    <div className="party-info">
-                      <span className="party-label">Seller:</span>
-                      <span className="party-name">
-                        {order.seller.first_name} {order.seller.last_name}
-                      </span>
+                    <div className="detail-item">
+                      <span className="detail-label">Ordered:</span>
+                      <span className="detail-value">{formatDate(order.created_at)}</span>
                     </div>
-                  )}
-                </div>
-
-                {order.requirements && (
-                  <div className="order-requirements">
-                    <span className="requirements-label">Requirements:</span>
-                    <p className="requirements-text">{order.requirements}</p>
+                    {order.delivery_date && (
+                      <div className="detail-item">
+                        <span className="detail-label">Delivery:</span>
+                        <span className="detail-value">{formatDate(order.delivery_date)}</span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              <div className="order-card-actions">
-                <button 
-                  className="btn btn-primary"
-                  onClick={() => handleViewOrder(order)}
-                >
-                  View Details
-                </button>
-                {isSeller && (
-                  <button 
-                    className="btn btn-secondary"
-                    onClick={() => handleEditOrder(order)}
-                  >
-                    Manage Order
-                  </button>
-                )}
+                  <div className="order-parties">
+                    {isSeller && order.buyer && (
+                      <div className="party-info">
+                        <span className="party-label">Buyer:</span>
+                        <span className="party-name">
+                          {order.buyer.first_name} {order.buyer.last_name}
+                        </span>
+                      </div>
+                    )}
+                    {isBuyer && order.seller && (
+                      <div className="party-info">
+                        <span className="party-label">Seller:</span>
+                        <span className="party-name">
+                          {order.seller.first_name} {order.seller.last_name}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {order.requirements && (
+                    <div className="order-requirements">
+                      <span className="requirements-label">Requirements:</span>
+                      <p className="requirements-text">{order.requirements}</p>
+                    </div>
+                  )}
+
+                  <div className="order-card-actions">
+                    <button 
+                      className="btn btn-primary"
+                      onClick={() => handleViewOrder(order)}
+                    >
+                      View Details
+                    </button>
+                    {isSeller && (
+                      <button 
+                        className="btn btn-secondary"
+                        onClick={() => handleEditOrder(order)}
+                      >
+                        Manage Order
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

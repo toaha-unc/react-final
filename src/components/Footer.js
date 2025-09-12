@@ -2,15 +2,11 @@ import React from 'react';
 import { 
   EnvelopeIcon, 
   PhoneIcon, 
-  MapPinIcon,
-  ArrowUpIcon
+  MapPinIcon
 } from '@heroicons/react/24/outline';
 import './Footer.css';
 
 const Footer = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   return (
     <footer className="footer">
@@ -90,9 +86,6 @@ const Footer = () => {
               <a href="#cookies">Cookie Policy</a>
             </div>
           </div>
-          <button className="scroll-to-top" onClick={scrollToTop}>
-            <ArrowUpIcon className="scroll-icon" />
-          </button>
         </div>
       </div>
     </footer>

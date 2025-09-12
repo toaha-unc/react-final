@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { servicesAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import Header from './Header';
 import ServiceCard from './ServiceCard';
 import ServiceFilters from './ServiceFilters';
 import ServiceSort from './ServiceSort';
@@ -24,7 +25,6 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
   });
   const [sortBy, setSortBy] = useState('newest');
   const [totalCount, setTotalCount] = useState(0);
-  const [showFilters, setShowFilters] = useState(false);
 
   const fetchAllServices = useCallback(async () => {
     try {
@@ -331,30 +331,27 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
 
   return (
     <div className="service-list">
+      <Header />
       <div className="service-list-header">
         <h1>Services</h1>
-        <div className="service-list-controls">
-          <button
-            className="btn btn-secondary"
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            {showFilters ? 'Hide Filters' : 'Show Filters'}
-          </button>
-        </div>
       </div>
 
-      {showFilters && (
-        <ServiceFilters
-          onFiltersChange={handleFiltersChange}
-          currentFilters={filters}
-        />
-      )}
+      <div className="filters-sort-container">
+        <div className="filters-container">
+          <ServiceFilters
+            onFiltersChange={handleFiltersChange}
+            currentFilters={filters}
+          />
+        </div>
 
-      <ServiceSort
-        currentSort={sortBy}
-        onSortChange={handleSortChange}
-        resultsCount={filteredServices.length}
-      />
+        <div className="sort-container">
+          <ServiceSort
+            currentSort={sortBy}
+            onSortChange={handleSortChange}
+            resultsCount={filteredServices.length}
+          />
+        </div>
+      </div>
 
       <div className="service-list-content">
         <div className="service-list-stats">

@@ -67,20 +67,7 @@ const OrderStatus = ({ status, onStatusChange, canEdit = false }) => {
   }
 
   return (
-    <div 
-      className={`order-status ${canEdit ? 'editable' : ''}`}
-      onClick={handleEditClick}
-      style={{ 
-        backgroundColor: currentStatus.color,
-        color: '#fff',
-        cursor: canEdit ? 'pointer' : 'default'
-      }}
-    >
-      <span className="status-text">{currentStatus.label}</span>
-      {canEdit && (
-        <span className="edit-icon">✏️</span>
-      )}
-    </div>
+    <span className="status-text">{currentStatus.label}</span>
   );
 };
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { notificationsAPI } from '../services/api';
+import Header from './Header';
 import './Notifications.css';
 
 const Notifications = () => {
@@ -21,7 +22,7 @@ const Notifications = () => {
       
       const params = {};
       if (filter !== 'all') {
-        params.read = filter === 'read';
+        params.is_read = filter === 'read';
       }
       
       const response = await notificationsAPI.getNotifications(params);
@@ -128,6 +129,7 @@ const Notifications = () => {
 
   return (
     <div className="notifications">
+      <Header />
       <div className="notifications-header">
         <h1>Notifications</h1>
         <div className="notifications-actions">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { profileAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
+import Header from './Header';
 import './SellerProfile.css';
 
 const SellerProfile = () => {
@@ -511,19 +512,23 @@ const SellerProfile = () => {
 
   if (loading) {
     return (
-      <div className="seller-profile-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading profile...</p>
+      <div className="seller-profile-page">
+        <Header />
+        <div className="seller-profile-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading profile...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="seller-profile">
-      <div className="profile-header">
+    <div className="seller-profile-page">
+      <Header />
+      <div className="seller-profile">
+        <div className="profile-header">
         <div className="header-content">
           <h2>Profile Settings</h2>
-          <p>Manage your seller profile and preferences</p>
         </div>
         <div className="profile-actions">
           <button 
@@ -570,6 +575,7 @@ const SellerProfile = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -146,7 +146,12 @@
 }
 
 .card-actions .btn {
-  min-width: 140px;
+  width: 160px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 /* Responsive Design */
@@ -189,6 +194,7 @@
   .card-actions .btn {
     width: 100%;
     max-width: 200px;
+    height: 48px;
   }
 }
 

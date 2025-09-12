@@ -1,7 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Hero.css';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const handleStartClick = () => {
+    navigate('/login');
+  };
+
+  const scrollToServices = () => {
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="hero">
       <div className="container">
@@ -17,11 +31,11 @@ const Hero = () => {
               businesses on our platform.
             </p>
             <div className="hero-actions">
-              <button className="btn btn-primary btn-large">
+              <button className="btn btn-primary btn-large" onClick={handleStartClick}>
                 Start
               </button>
-              <button className="btn btn-secondary btn-large">
-                Watch Demo
+              <button className="btn btn-secondary btn-large" onClick={scrollToServices}>
+                Browse Services
               </button>
             </div>
             <div className="hero-stats">

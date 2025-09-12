@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { servicesAPI, ordersAPI, paymentAPI } from '../services/api';
 import { formatPrice } from '../utils/formatting';
+import Header from './Header';
 import Payment from './Payment';
 import './OrderForm.css';
 
@@ -53,7 +54,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
       setLoading(true);
       setError(null);
       console.log('Fetching service with ID:', serviceId);
-      console.log('Full URL:', `http://localhost:8000/api/services/${serviceId}/`);
+      console.log('Full URL:', `https://django-final.vercel.app/api/services/${serviceId}/`);
       
       const response = await servicesAPI.getService(serviceId);
       console.log('API Response:', response);
@@ -260,6 +261,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
 
   return (
     <div className="order-form">
+      <Header />
       <div className="order-form-header">
         <h1>Place Order</h1>
         <p>Complete your order for: <strong>{service.title}</strong></p>
@@ -354,7 +356,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
               
               <div className="form-group">
                 <label htmlFor="buyer_phone" className="form-label">
-                  Phone Number *
+                  Phone # *
                 </label>
                 <input
                   type="tel"

@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './ServiceCard.css';
 
 const ServiceCard = ({ service, onEdit, onDelete, onViewDetails }) => {
-  const { isSeller } = useAuth();
+  const navigate = useNavigate();
+  const { isSeller, user } = useAuth();
 
   const formatPrice = (price) => {
     // Handle null, undefined, or invalid prices
@@ -39,6 +41,16 @@ const ServiceCard = ({ service, onEdit, onDelete, onViewDetails }) => {
   const truncateDescription = (description, maxLength = 150) => {
     if (description.length <= maxLength) return description;
     return description.substring(0, maxLength) + '...';
+  };
+
+  const handleOrderNow = () => {
+    if (!user) {
+      alert('Please login to place an order');
+      return;
+    }
+    
+    // Navigate to order form
+    navigate(`/order-form/${service.id}`);
   };
 
   return (
@@ -118,7 +130,7 @@ const ServiceCard = ({ service, onEdit, onDelete, onViewDetails }) => {
           View Details
         </button>
         {!isSeller && (
-          <button className="btn btn-secondary">
+          <button className="btn btn-secondary" onClick={handleOrderNow}>
             Order Now
           </button>
         )}

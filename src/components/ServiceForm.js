@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { servicesAPI } from '../services/api';
+import Header from './Header';
 import './ServiceForm.css';
 
 const ServiceForm = ({ service, onSave, onCancel, isEditing = false }) => {
@@ -34,9 +35,14 @@ const ServiceForm = ({ service, onSave, onCancel, isEditing = false }) => {
     try {
       setLoadingCategories(true);
       const response = await servicesAPI.getCategories();
-      setCategories(response.data);
+      // Handle paginated response format
+      const categoriesData = response.data.results || response.data;
+      const categoriesArray = Array.isArray(categoriesData) ? categoriesData : [];
+      setCategories(categoriesArray);
     } catch (error) {
       console.error('Error fetching categories:', error);
+      // Set empty array as fallback
+      setCategories([]);
     } finally {
       setLoadingCategories(false);
     }
@@ -127,6 +133,7 @@ const ServiceForm = ({ service, onSave, onCancel, isEditing = false }) => {
 
   return (
     <div className="service-form-container">
+      <Header />
       <div className="service-form">
         <div className="form-header">
           <h2>{isEditing ? 'Edit Service' : 'Create New Service'}</h2>
@@ -242,7 +249,7 @@ const ServiceForm = ({ service, onSave, onCancel, isEditing = false }) => {
               <option value="">
                 {loadingCategories ? 'Loading categories...' : 'Select a category'}
               </option>
-              {categories.map((category) => (
+              {Array.isArray(categories) && categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>

@@ -47,15 +47,6 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #000, #333);
-}
 
 .stat-icon {
   font-size: 2.5rem;
@@ -98,23 +89,23 @@
 
 /* Card Type Variations */
 .earnings-card .stat-icon {
-  background: linear-gradient(135deg, #28a745, #20c997);
-  color: #fff;
+  background: #f8f9fa;
+  color: #000;
 }
 
 .orders-card .stat-icon {
-  background: linear-gradient(135deg, #007bff, #6610f2);
-  color: #fff;
+  background: #f8f9fa;
+  color: #000;
 }
 
 .services-card .stat-icon {
-  background: linear-gradient(135deg, #ffc107, #fd7e14);
-  color: #fff;
+  background: #f8f9fa;
+  color: #000;
 }
 
 .performance-card .stat-icon {
-  background: linear-gradient(135deg, #6f42c1, #e83e8c);
-  color: #fff;
+  background: #f8f9fa;
+  color: #000;
 }
 
 /* Quick Actions */

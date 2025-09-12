@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Header from './Header';
 import Recommendations from './Recommendations';
 import './Dashboard.css';
 
@@ -8,8 +9,10 @@ const Dashboard = () => {
   const { user, isSeller, isBuyer } = useAuth();
   const navigate = useNavigate();
 
+
   return (
     <div className="dashboard">
+      <Header />
       <div className="container">
         <div className="dashboard-header">
           <h1>Welcome to your Dashboard</h1>
@@ -92,7 +95,7 @@ const Dashboard = () => {
                     className="btn btn-secondary"
                     onClick={() => navigate('/orders')}
                   >
-                    My Orders
+                    Order History
                   </button>
                 </div>
               </div>
@@ -115,7 +118,12 @@ const Dashboard = () => {
               <h3>Profile Settings</h3>
               <p>Update your profile information and preferences.</p>
               <div className="card-actions">
-                <button className="btn btn-primary">Edit Profile</button>
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => navigate('/profile')}
+                >
+                  Edit Profile
+                </button>
                 <button className="btn btn-secondary">Account Settings</button>
               </div>
             </div>

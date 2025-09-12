@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { reviewsAPI } from '../services/api';
+import EditReviewModal from './EditReviewModal';
 import './BuyerReviews.css';
 
 const BuyerReviews = () => {
@@ -10,6 +11,8 @@ const BuyerReviews = () => {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('created_at');
+  const [editingReview, setEditingReview] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     fetchReviews();
@@ -20,14 +23,10 @@ const BuyerReviews = () => {
       setLoading(true);
       setError(null);
       
-      // Since we don't have a specific endpoint for buyer reviews, we'll fetch all reviews
-      // and filter by the current user as the reviewer
-      const response = await reviewsAPI.getServiceReviews();
-      const allReviews = response.data?.results || response.data || [];
-      
-      // Filter reviews by current user
-      const userReviews = allReviews.filter(review => review.reviewer?.id === user?.id);
-      setReviews(Array.isArray(userReviews) ? userReviews : []);
+      // Use the dedicated buyer review history endpoint
+      const response = await reviewsAPI.getBuyerReviews();
+      const reviewsData = response.data?.results || response.data || [];
+      setReviews(Array.isArray(reviewsData) ? reviewsData : []);
     } catch (error) {
       console.error('Error fetching reviews:', error);
       setError('Failed to load reviews. Please try again.');
@@ -81,8 +80,17 @@ const BuyerReviews = () => {
   };
 
   const handleEditReview = (review) => {
-    // Navigate to edit review page or open edit modal
-    window.location.href = `/reviews/${review.id}/edit`;
+    setEditingReview(review);
+    setShowEditModal(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setEditingReview(null);
+  };
+
+  const handleSaveReview = () => {
+    fetchReviews(); // Refresh the reviews list
   };
 
   if (loading) {
@@ -160,7 +168,7 @@ const BuyerReviews = () => {
             className="btn btn-primary"
             onClick={() => window.location.href = '/orders'}
           >
-            View My Orders
+            View Order History
           </button>
         </div>
       ) : (
@@ -226,9 +234,6 @@ const BuyerReviews = () => {
                   <span className="review-date">
                     {formatDate(review.created_at)}
                   </span>
-                  <span className="review-helpful">
-                    {review.helpful_count || 0} helpful
-                  </span>
                 </div>
                 
                 <div className="review-actions">
@@ -275,6 +280,14 @@ const BuyerReviews = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Review Modal */}
+      <EditReviewModal
+        review={editingReview}
+        isOpen={showEditModal}
+        onClose={handleCloseEditModal}
+        onSave={handleSaveReview}
+      />
     </div>
   );
 };

@@ -29,6 +29,20 @@
   color: inherit;
 }
 
+.logo-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-btn:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
 .logo h2 {
   font-size: 1.8rem;
   font-weight: 800;
@@ -45,7 +59,7 @@
 .nav-link {
   text-decoration: none;
   color: #000;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 1rem;
   transition: color 0.3s ease;
   position: relative;
@@ -86,6 +100,17 @@
   display: flex;
   align-items: center;
   gap: 15px;
+}
+
+/* Sign in and Sign up button styles */
+.header-actions .btn {
+  padding: 8px 20px;
+  min-width: 100px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
 }
 
 /* User Menu Styles */
@@ -303,7 +328,7 @@
 
   .nav-link.logout {
     color: #dc3545;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .nav-link:hover {

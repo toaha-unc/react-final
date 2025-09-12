@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { dashboardAPI } from '../services/api';
+import Header from './Header';
 import SellerStats from './SellerStats';
 import SellerServices from './SellerServices';
 import SellerOrders from './SellerOrders';
@@ -100,6 +101,7 @@ const SellerDashboard = () => {
 
   return (
     <div className="seller-dashboard">
+      <Header />
       <div className="container">
         <div className="seller-dashboard-header">
           <div className="welcome-section">
@@ -110,20 +112,18 @@ const SellerDashboard = () => {
         </div>
 
         <div className="seller-dashboard-content">
-          <div className="dashboard-sidebar">
-            <nav className="dashboard-nav">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  className={`nav-item ${activeTab === tab.id ? 'active' : ''}`}
-                  onClick={() => setActiveTab(tab.id)}
-                >
-                  <span className="nav-icon">{tab.icon}</span>
-                  <span className="nav-label">{tab.label}</span>
-                </button>
-              ))}
-            </nav>
-          </div>
+          <nav className="dashboard-nav">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={`nav-item ${activeTab === tab.id ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <span className="nav-icon">{tab.icon}</span>
+                <span className="nav-label">{tab.label}</span>
+              </button>
+            ))}
+          </nav>
 
           <div className="dashboard-main">
             <div className="tab-content">

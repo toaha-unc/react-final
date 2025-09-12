@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { servicesAPI, reviewsAPI, ordersAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { formatPrice, formatDate } from '../utils/formatting';
+import Header from './Header';
 import ReviewForm from './ReviewForm';
 import './ServiceDetails.css';
 
@@ -22,11 +23,19 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
     try {
       setLoading(true);
       setError(null);
+      console.log('Fetching service details for ID:', serviceId);
       const response = await servicesAPI.getService(serviceId);
+      console.log('Service details response:', response);
       setService(response.data);
     } catch (error) {
       console.error('Error fetching service details:', error);
-      setError('Failed to load service details. Please try again.');
+      console.error('Error details:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data
+      });
+      setError(`Failed to load service details: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -184,6 +193,7 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
 
   return (
     <div className="service-details">
+      <Header />
       <div className="service-details-header">
         <button className="back-btn" onClick={onBack}>
           ← Back to Services
@@ -254,17 +264,6 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
                       <div className="seller-bio">
                         {service.seller?.bio || 'Experienced professional providing quality services.'}
                       </div>
-                      <div className="seller-location">
-                        📍 {service.seller?.location || 'Location not specified'}
-                      </div>
-                      <div className="seller-joined">
-                        Member since {service.seller?.date_joined ? 
-                          new Date(service.seller.date_joined).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'long' 
-                          }) : 'Unknown'
-                        }
-                      </div>
                     </div>
                     <div className="seller-stats">
                       <div className="stat">
@@ -300,7 +299,7 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
                     </div>
                     <div className="requirement-item">
                       <span className="requirement-label">Communication:</span>
-                      <span className="requirement-value">{service.communication || 'Via platform messaging'}</span>
+                      <span className="requirement-value">{service.communication || 'Messaging'}</span>
                     </div>
                     <div className="requirement-item">
                       <span className="requirement-label">File Format:</span>
@@ -330,12 +329,7 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
                   <div className="no-reviews">
                     <h3>No Reviews Yet</h3>
                     <p>
-                      {userCanReview 
-                        ? 'Be the first to review this service!' 
-                        : userHasOrdered 
-                          ? 'You can review this service after completion.'
-                          : 'Reviews will appear here after customers complete their orders.'
-                      }
+                      Reviews will appear here after customers complete their orders.
                     </p>
                   </div>
                 ) : (
@@ -380,7 +374,7 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
                               className="helpful-btn"
                               onClick={() => handleMarkHelpful(review.id)}
                             >
-                              👍 Helpful ({review.is_helpful || 0})
+                              👍 Helpful
                             </button>
                           </div>
                         </div>
@@ -432,14 +426,6 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
                   </button>
                 )}
                 
-                {user && !isSeller && userCanReview && (
-                  <button 
-                    className="btn btn-secondary review-btn" 
-                    onClick={() => setShowReviewForm(!showReviewForm)}
-                  >
-                    Write Review
-                  </button>
-                )}
               </div>
             )}
             

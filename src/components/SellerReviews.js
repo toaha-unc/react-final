@@ -23,31 +23,22 @@ const SellerReviews = () => {
       setError(null);
 
       // Fetch seller's services first
-      const servicesResponse = await servicesAPI.getServices({ seller: user?.id });
+      const servicesResponse = await servicesAPI.getSellerServices();
       const servicesData = servicesResponse.data?.results || servicesResponse.data || [];
       setServices(Array.isArray(servicesData) ? servicesData : []);
 
-      // Fetch reviews for all services
-      const serviceIds = servicesData.map(service => service.id);
-      const allReviews = [];
+      // Use the dedicated seller reviews endpoint
+      const reviewsResponse = await reviewsAPI.getSellerReviews(user?.id);
+      const reviewsData = reviewsResponse.data?.results || reviewsResponse.data || [];
+      
+      // Add service title to each review
+      const reviewsWithServiceTitle = reviewsData.map(review => ({
+        ...review,
+        service_id: review.service?.id,
+        service_title: review.service?.title || 'Service Deleted'
+      }));
 
-      for (const serviceId of serviceIds) {
-        try {
-          const reviewsResponse = await reviewsAPI.getServiceReviews(serviceId);
-          const serviceReviews = reviewsResponse.data?.results || reviewsResponse.data || [];
-          if (Array.isArray(serviceReviews)) {
-            allReviews.push(...serviceReviews.map(review => ({
-              ...review,
-              service_id: serviceId,
-              service_title: servicesData.find(s => s.id === serviceId)?.title
-            })));
-          }
-        } catch (error) {
-          console.error(`Error fetching reviews for service ${serviceId}:`, error);
-        }
-      }
-
-      setReviews(allReviews);
+      setReviews(reviewsWithServiceTitle);
     } catch (error) {
       console.error('Error fetching reviews:', error);
       setError('Failed to load reviews. Please try again.');
@@ -320,7 +311,7 @@ const SellerReviews = () => {
                   </div>
                   <div className="reviewer-details">
                     <h4 className="reviewer-name">
-                      {review.buyer?.first_name || 'Unknown'} {review.buyer?.last_name || 'User'}
+                      {review.buyer?.first_name || 'Anonymous'} {review.buyer?.last_name || 'User'}
                     </h4>
                     <p className="review-service">{review.service_title}</p>
                     <span className="review-date">{formatDate(review.created_at)}</span>
@@ -355,11 +346,6 @@ const SellerReviews = () => {
               </div>
 
               <div className="review-footer">
-                <div className="review-helpful">
-                  <span className="helpful-count">
-                    {review.is_helpful} people found this helpful
-                  </span>
-                </div>
                 <div className="review-actions">
                   <button className="btn btn-outline">
                     Reply

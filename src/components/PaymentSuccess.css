@@ -183,7 +183,8 @@
 }
 
 .btn-secondary:hover {
-  background: #f8f9fa;
+  background: #000;
+  color: #fff;
 }
 
 .btn-outline {

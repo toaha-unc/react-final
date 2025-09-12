@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import Header from '../Header';
 import './Auth.css';
 
 const Register = () => {
@@ -103,9 +104,11 @@ const Register = () => {
 
   if (registrationSuccess) {
     return (
-      <div className="auth-container">
-        <div className="auth-card">
-          <div className="success-message">
+      <div className="auth-page">
+        <Header />
+        <div className="auth-container">
+          <div className="auth-card">
+            <div className="success-message">
             <h1>Registration Successful!</h1>
             <p>
               We've sent a verification email to <strong>{formData.email}</strong>.
@@ -128,13 +131,16 @@ const Register = () => {
           </div>
         </div>
       </div>
+      </div>
     );
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
+    <div className="auth-page">
+      <Header />
+      <div className="auth-container">
+        <div className="auth-card">
+          <div className="auth-header">
           <h1>Create Account</h1>
           <p>Join our platform as a service provider or buyer</p>
         </div>
@@ -277,6 +283,7 @@ const Register = () => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };
