@@ -144,17 +144,6 @@ const SellerServices = () => {
     setEditingService(null);
   };
 
-  const handleTestDelete = () => {
-    // Test function to manually set a service as inactive
-    console.log('Testing delete functionality...');
-    setServices(prevServices => {
-      const updatedServices = prevServices.map(service => 
-        service.id === 1 ? { ...service, is_active: false } : service
-      );
-      console.log('Updated services for test:', updatedServices);
-      return updatedServices;
-    });
-  };
 
   const formatPrice = (price) => {
     if (price === null || price === undefined || isNaN(price)) {
@@ -196,13 +185,6 @@ const SellerServices = () => {
             onClick={handleCreateService}
           >
             + Add New Service
-          </button>
-          <button 
-            className="btn btn-secondary"
-            onClick={handleTestDelete}
-            style={{ marginLeft: '10px' }}
-          >
-            Test Delete
           </button>
         </div>
       </div>
@@ -261,9 +243,6 @@ const SellerServices = () => {
                 </div>
 
                 <div className="service-card-actions">
-                  <div className="service-status-info">
-                    <small>Status: {service.is_active ? 'Active' : 'Inactive'}</small>
-                  </div>
                   <div className="action-buttons">
                     <button 
                       className="btn btn-secondary"
