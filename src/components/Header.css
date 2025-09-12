@@ -19,6 +19,14 @@
   position: relative;
 }
 
+.header-top {
+  display: none;
+}
+
+.desktop-logo {
+  display: block;
+}
+
 .logo a {
   text-decoration: none;
   color: inherit;
@@ -229,6 +237,8 @@
   color: #000;
   transition: all 0.3s ease;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1001;
 }
 
 .mobile-menu-btn:hover {
@@ -263,13 +273,24 @@
   }
 
   .header-content {
-    flex-wrap: nowrap;
-    gap: 15px;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .header-top {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .desktop-logo {
+    display: none;
   }
 
   .nav {
     position: fixed;
-    top: 100%;
+    top: 80px;
     left: 0;
     right: 0;
     background-color: #fff;

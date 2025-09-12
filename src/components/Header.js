@@ -62,7 +62,19 @@ const Header = () => {
       <header className="header">
         <div className="container">
           <div className="header-content">
-            <div className="logo">
+            <div className="header-top">
+              <div className="logo">
+                <button onClick={handleLogoClick} className="logo-btn">
+                  <h2>FreelanceWork</h2>
+                </button>
+              </div>
+              
+              <button className="mobile-menu-btn" onClick={toggleMenu}>
+                {isMenuOpen ? <XMarkIcon /> : <Bars3Icon />}
+              </button>
+            </div>
+            
+            <div className="logo desktop-logo">
               <button onClick={handleLogoClick} className="logo-btn">
                 <h2>FreelanceWork</h2>
               </button>
@@ -183,10 +195,6 @@ const Header = () => {
                 </>
               )}
             </div>
-
-            <button className="mobile-menu-btn" onClick={toggleMenu}>
-              {isMenuOpen ? <XMarkIcon /> : <Bars3Icon />}
-            </button>
           </div>
         </div>
       </header>
