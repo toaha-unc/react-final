@@ -57,9 +57,9 @@ const ServiceCard = ({ service, onEdit, onDelete, onViewDetails }) => {
     <div className="service-card">
       <div className="service-card-header">
         <div className="service-category">
-          {service.category?.name || 'Uncategorized'}
+          {typeof service.category === 'string' ? service.category : service.category?.name || 'Uncategorized'}
         </div>
-        {isSeller && (
+        {onEdit && onDelete && (
           <div className="service-actions">
             <button 
               className="btn-icon" 
@@ -99,7 +99,6 @@ const ServiceCard = ({ service, onEdit, onDelete, onViewDetails }) => {
 
         <div className="service-footer">
           <div className="service-seller">
-            <span className="seller-label">By:</span>
             <span className="seller-name">
               {service.seller?.first_name} {service.seller?.last_name}
             </span>

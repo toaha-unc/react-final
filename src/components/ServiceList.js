@@ -68,7 +68,7 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
             description: 'Custom websites, web applications, and e-commerce solutions built with modern technologies.',
             price: 500,
             delivery_time: 7,
-            category: { id: 1, name: 'Web Development' },
+            category: 'Web Development',
             seller: { id: 1, first_name: 'John', last_name: 'Doe' },
             rating: 4.8,
             reviews_count: 25,
@@ -81,7 +81,7 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
             description: 'Professional logo design, branding, and visual identity solutions for your business.',
             price: 200,
             delivery_time: 3,
-            category: { id: 2, name: 'Graphic Design' },
+            category: 'Graphic Design',
             seller: { id: 2, first_name: 'Jane', last_name: 'Smith' },
             rating: 4.9,
             reviews_count: 18,
@@ -94,7 +94,7 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
             description: 'Social media management, SEO optimization, and content marketing strategies.',
             price: 300,
             delivery_time: 5,
-            category: { id: 3, name: 'Digital Marketing' },
+            category: 'Digital Marketing',
             seller: { id: 3, first_name: 'Mike', last_name: 'Johnson' },
             rating: 4.7,
             reviews_count: 12,
@@ -107,7 +107,7 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
             description: 'High-quality blog posts, articles, and copywriting services for your business.',
             price: 100,
             delivery_time: 2,
-            category: { id: 4, name: 'Writing' },
+            category: 'Writing',
             seller: { id: 4, first_name: 'Sarah', last_name: 'Wilson' },
             rating: 4.6,
             reviews_count: 15,
@@ -120,7 +120,7 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
             description: 'Professional video editing, animation, and motion graphics for your projects.',
             price: 400,
             delivery_time: 10,
-            category: { id: 5, name: 'Video & Animation' },
+            category: 'Video & Animation',
             seller: { id: 5, first_name: 'David', last_name: 'Brown' },
             rating: 4.8,
             reviews_count: 8,
@@ -133,7 +133,7 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
             description: 'Strategic business advice, market analysis, and growth planning services.',
             price: 250,
             delivery_time: 7,
-            category: { id: 6, name: 'Business' },
+            category: 'Business',
             seller: { id: 6, first_name: 'Lisa', last_name: 'Davis' },
             rating: 4.9,
             reviews_count: 20,
@@ -155,7 +155,7 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
           description: 'Custom websites, web applications, and e-commerce solutions built with modern technologies.',
           price: 500,
           delivery_time: 7,
-          category: { id: 1, name: 'Web Development' },
+          category: 'Web Development',
           seller: { id: 1, first_name: 'John', last_name: 'Doe' },
           rating: 4.8,
           reviews_count: 25,
@@ -168,7 +168,7 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
           description: 'Professional logo design, branding, and visual identity solutions for your business.',
           price: 200,
           delivery_time: 3,
-          category: { id: 2, name: 'Graphic Design' },
+          category: 'Graphic Design',
           seller: { id: 2, first_name: 'Jane', last_name: 'Smith' },
           rating: 4.9,
           reviews_count: 18,
@@ -186,6 +186,11 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
   // Filter and sort services based on current filters and sortBy
   const applyFiltersAndSort = useCallback((services, currentFilters, currentSortBy) => {
     let filtered = [...services];
+
+    // Filter out deleted/inactive services (only show if explicitly true)
+    console.log('Before filtering - services:', services.map(s => ({ id: s.id, title: s.title, is_active: s.is_active })));
+    filtered = filtered.filter(service => service.is_active === true);
+    console.log('After filtering - services:', filtered.map(s => ({ id: s.id, title: s.title, is_active: s.is_active })));
 
     // Apply search filter
     if (currentFilters.search) {
@@ -390,8 +395,8 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
                 <ServiceCard
                   key={service.id}
                   service={service}
-                  onEdit={isSeller ? handleEditService : null}
-                  onDelete={isSeller ? handleDeleteService : null}
+                  onEdit={isSeller && user && service.seller && service.seller.id === user.id ? handleEditService : null}
+                  onDelete={isSeller && user && service.seller && service.seller.id === user.id ? handleDeleteService : null}
                   onViewDetails={handleViewServiceDetails}
                 />
               ))}

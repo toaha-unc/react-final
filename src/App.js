@@ -116,19 +116,13 @@ const ServicesPage = () => {
 // Main Orders component that handles state
 const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [editingOrder, setEditingOrder] = useState(null);
 
   const handleViewOrder = (order) => {
     setSelectedOrder(order);
   };
 
-  const handleEditOrder = (order) => {
-    setEditingOrder(order);
-  };
-
   const handleBackToList = () => {
     setSelectedOrder(null);
-    setEditingOrder(null);
   };
 
   if (selectedOrder) {
@@ -136,7 +130,6 @@ const OrdersPage = () => {
       <OrderDetails
         orderId={selectedOrder.id}
         onBack={handleBackToList}
-        onEdit={handleEditOrder}
       />
     );
   }
@@ -144,7 +137,6 @@ const OrdersPage = () => {
   return (
     <OrderList
       onViewOrder={handleViewOrder}
-      onEditOrder={handleEditOrder}
     />
   );
 };

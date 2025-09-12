@@ -215,7 +215,7 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
         <div className="service-main">
           <div className="service-header">
             <div className="service-category">
-              {service.category?.name || 'Uncategorized'}
+              {typeof service.category === 'string' ? service.category : service.category?.name || 'Uncategorized'}
             </div>
             <h1 className="service-title">{service.title}</h1>
             <div className="service-meta">

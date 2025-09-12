@@ -33,9 +33,17 @@
   background: #fff;
   border: 2px solid #000;
   border-radius: 12px;
-  padding: 25px;
+  padding: 20px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 180px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .stat-card:hover {
@@ -44,25 +52,38 @@
 }
 
 .stat-icon {
-  font-size: 2.5rem;
-  margin-bottom: 15px;
+  font-size: 1.5rem;
+  margin-bottom: 6px;
   display: block;
+  flex-shrink: 0;
+}
+
+.stat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .stat-content h3 {
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: #666;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  line-height: 1.2;
 }
 
 .stat-value {
-  font-size: 2.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #000;
   line-height: 1;
+  word-break: break-word;
+  text-align: center;
 }
 
 .orders-filters {
@@ -143,38 +164,39 @@
 }
 
 .orders-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0px;
-  margin: 0px;
-  padding: 0px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
 }
 
 .seller-orders .order-card {
   background: #fff;
-  border: 1px solid #000;
-  border-radius: 0px;
+  border: 2px solid #000;
+  border-radius: 12px;
   overflow: hidden;
-  transition: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
-  flex: 0 0 calc(33.333% - 0px);
-  min-width: 200px;
-  margin: 0px;
-  padding: 0px;
-  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .seller-orders .order-card:hover {
-  transform: none;
-  box-shadow: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .seller-orders .order-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 20px 20px 15px 20px;
   border-bottom: 1px solid #e9ecef;
 }
 
@@ -183,15 +205,15 @@
 }
 
 .seller-orders .order-title {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #000;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   line-height: 1.3;
 }
 
 .seller-orders .order-id {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: #666;
   font-weight: 500;
 }
@@ -201,33 +223,31 @@
 }
 
 .seller-orders .order-card-content {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
 .seller-orders .order-details {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0px;
-  margin: 0px;
-  padding: 0px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin: 0 0 20px 0;
+  padding: 0;
 }
 
 .seller-orders .detail-item {
   display: flex;
   flex-direction: column;
-  gap: 0px;
-  flex: 0 0 auto;
-  min-width: 30px;
-  margin: 0px;
-  padding: 0px;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
 }
 
 .seller-orders .detail-label {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #666;
   text-transform: uppercase;
@@ -235,7 +255,7 @@
 }
 
 .seller-orders .detail-value {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #000;
 }
@@ -269,6 +289,10 @@
 
 .buyer-info {
   margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
 }
 
 .buyer-details {
@@ -323,9 +347,9 @@
 
 .seller-orders .order-card-actions {
   display: flex;
-  gap: 0px;
-  margin: 0px;
-  padding: 0px;
+  gap: 10px;
+  margin: 0;
+  padding: 15px 20px;
   background: #f8f9fa;
   border-top: 1px solid #e9ecef;
   flex-wrap: wrap;
@@ -334,11 +358,13 @@
 
 .seller-orders .order-card-actions .btn {
   flex: 1;
-  min-width: 30px;
-  margin: 0px;
-  padding: 0px;
-  font-size: 0.6rem;
+  min-width: 80px;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 0.85rem;
   text-align: center;
+  border-radius: 6px;
+  font-weight: 500;
 }
 
 .btn-success {
@@ -508,6 +534,13 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .orders-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+  }
+}
+
 @media (max-width: 768px) {
   .orders-header h2 {
     font-size: 2rem;
@@ -516,6 +549,28 @@
   .order-stats {
     flex-direction: column;
     gap: 15px;
+    align-items: center;
+  }
+  
+  .stat-card {
+    width: 100%;
+    max-width: 280px;
+    height: 120px;
+    padding: 15px;
+  }
+  
+  .stat-icon {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+  }
+  
+  .stat-content h3 {
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+  }
+  
+  .stat-value {
+    font-size: 1.3rem;
   }
   
   .orders-filters {
@@ -528,12 +583,12 @@
   }
   
   .orders-grid {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 20px;
   }
   
   .seller-orders .order-details {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 10px;
   }
   
@@ -557,9 +612,15 @@
 }
 
 @media (max-width: 480px) {
+  .orders-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
   .seller-orders .order-card-header {
     flex-direction: column;
     gap: 15px;
+    padding: 15px;
   }
   
   .seller-orders .order-status {
@@ -567,11 +628,43 @@
     align-self: flex-start;
   }
   
+  .seller-orders .order-card-content {
+    padding: 15px;
+  }
+  
+  .seller-orders .order-details {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .seller-orders .order-card-actions {
+    padding: 12px 15px;
+    gap: 8px;
+  }
+  
+  .seller-orders .order-card-actions .btn {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+  
   .stat-card {
-    padding: 20px;
+    padding: 15px;
+    width: 100%;
+    max-width: 260px;
+    height: 110px;
+  }
+  
+  .stat-icon {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+  }
+  
+  .stat-content h3 {
+    font-size: 0.65rem;
+    margin-bottom: 4px;
   }
   
   .stat-value {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
   }
 }

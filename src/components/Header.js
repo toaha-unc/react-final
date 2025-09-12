@@ -7,7 +7,7 @@ import './Header.css';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, isSeller } = useAuth();
   const navigate = useNavigate();
 
   const toggleMenu = () => {
@@ -83,12 +83,14 @@ const Header = () => {
                   >
                     Services
                   </button>
-                  <button 
-                    className="nav-link"
-                    onClick={() => handleNavigation('/orders')}
-                  >
-                    Orders
-                  </button>
+                  {!isSeller && (
+                    <button 
+                      className="nav-link"
+                      onClick={() => handleNavigation('/orders')}
+                    >
+                      Orders
+                    </button>
+                  )}
                   <button 
                     className="nav-link"
                     onClick={() => handleNavigation('/reviews')}

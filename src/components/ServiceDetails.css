@@ -1,8 +1,6 @@
 /* Service Details Styles */
 .service-details {
-  min-height: 100vh;
   background-color: #fff;
-  padding-top: 100px;
 }
 
 .service-details-loading {
@@ -154,7 +152,7 @@
 }
 
 .service-title {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #000;
   margin-bottom: 20px;

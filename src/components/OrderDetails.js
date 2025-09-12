@@ -200,13 +200,6 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
           ← Back to Orders
         </button>
         
-        {isOwner && (
-          <div className="order-actions">
-            <button className="btn btn-secondary" onClick={() => onEdit && onEdit(order)}>
-              Edit Order
-            </button>
-          </div>
-        )}
       </div>
 
       <div className="order-details-content">

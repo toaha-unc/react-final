@@ -33,7 +33,9 @@ const Services = () => {
         console.log('Processed services:', servicesData);
         
         if (servicesData && servicesData.length > 0) {
-          setServices(servicesData);
+          // Filter out deleted/inactive services (only show if explicitly true)
+          const activeServices = servicesData.filter(service => service.is_active === true);
+          setServices(activeServices);
         } else {
           console.log('No services found in API response, using fallback');
           // Use fallback data instead of throwing error

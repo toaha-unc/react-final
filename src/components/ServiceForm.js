@@ -24,7 +24,7 @@ const ServiceForm = ({ service, onSave, onCancel, isEditing = false }) => {
         title: service.title || '',
         description: service.description || '',
         price: service.price || '',
-        category: service.category?.id || '',
+        category: service.category?.id || service.category || '',
         delivery_time: service.delivery_time || '',
         is_featured: service.is_featured || false,
       });

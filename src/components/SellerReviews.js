@@ -189,7 +189,6 @@ const SellerReviews = () => {
       <div className="reviews-header">
         <div className="header-content">
           <h2>Reviews & Ratings</h2>
-          <p>See what your customers are saying about your services</p>
         </div>
       </div>
 
@@ -345,13 +344,6 @@ const SellerReviews = () => {
                 )}
               </div>
 
-              <div className="review-footer">
-                <div className="review-actions">
-                  <button className="btn btn-outline">
-                    Reply
-                  </button>
-                </div>
-              </div>
             </div>
           ))}
         </div>

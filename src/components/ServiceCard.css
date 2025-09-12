@@ -151,6 +151,7 @@
 .seller-name {
   font-weight: 600;
   color: #000;
+  padding: 4px 8px;
 }
 
 .service-stats {
@@ -176,6 +177,7 @@
   color: #666;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  padding: 2px 4px;
 }
 
 .service-card-actions {

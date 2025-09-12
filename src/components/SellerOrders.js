@@ -201,7 +201,6 @@ const SellerOrders = () => {
       <div className="orders-header">
         <div className="header-content">
           <h2>Order Management</h2>
-          <p>Track and manage orders for your services</p>
         </div>
       </div>
 
@@ -365,12 +364,6 @@ const SellerOrders = () => {
                   >
                     View Details
                   </button>
-                  <button 
-                    className="btn btn-secondary"
-                    onClick={() => {/* Handle message buyer */}}
-                  >
-                    Message Buyer
-                  </button>
                   {order.status === 'pending' && (
                     <button 
                       className="btn btn-success"
@@ -441,12 +434,6 @@ const SellerOrders = () => {
                 onClick={handleCloseOrderDetails}
               >
                 Close
-              </button>
-              <button 
-                className="btn btn-primary"
-                onClick={() => {/* Handle message buyer */}}
-              >
-                Message Buyer
               </button>
             </div>
           </div>

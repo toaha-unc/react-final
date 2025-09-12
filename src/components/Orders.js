@@ -74,11 +74,6 @@ const Orders = () => {
     setSelectedOrder(order);
   };
 
-  const handleEditOrder = (order) => {
-    // For now, just view the order details
-    // In the future, this could open an edit modal or navigate to edit page
-    setSelectedOrder(order);
-  };
 
   const handleBackToList = () => {
     setSelectedOrder(null);
@@ -119,7 +114,6 @@ const Orders = () => {
       <OrderDetails
         orderId={selectedOrder.id}
         onBack={handleBackToList}
-        onEdit={handleEditOrder}
       />
     );
   }
@@ -155,9 +149,6 @@ const Orders = () => {
       <div className="orders-header">
         <div className="header-content">
           <h1>Orders</h1>
-          <p className="orders-subtitle">
-            {isSeller ? 'Manage your received orders' : ''}
-          </p>
         </div>
       </div>
 
@@ -256,14 +247,6 @@ const Orders = () => {
                         >
                           View Details
                         </button>
-                        {isSeller && (
-                          <button 
-                            className="btn btn-secondary"
-                            onClick={() => {/* Handle edit order */}}
-                          >
-                            Edit
-                          </button>
-                        )}
                       </div>
                     </div>
                   </div>

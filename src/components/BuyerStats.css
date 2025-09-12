@@ -79,11 +79,15 @@
   background: #fff;
   border: 2px solid #000;
   border-radius: 12px;
-  padding: 24px;
+  padding: 20px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 180px;
+  height: 120px;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .stat-card:hover {
@@ -122,9 +126,9 @@
 }
 
 .stat-icon {
-  font-size: 2rem;
-  width: 50px;
-  height: 50px;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,14 +138,14 @@
 }
 
 .stat-content h3 {
-  font-size: 2rem;
+  font-size: 0.85rem;
   font-weight: 700;
   margin: 0 0 4px 0;
   line-height: 1;
 }
 
 .stat-content p {
-  font-size: 0.9rem;
+  font-size: 0.45rem;
   font-weight: 500;
   margin: 0;
   opacity: 0.9;
@@ -332,20 +336,27 @@
   }
   
   .stat-card {
-    padding: 20px;
+    padding: 15px;
     flex-direction: column;
     text-align: center;
-    gap: 12px;
+    gap: 10px;
+    width: 100%;
+    max-width: 280px;
+    height: 100px;
   }
   
   .stat-icon {
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
+    font-size: 1.3rem;
+    width: 35px;
+    height: 35px;
   }
   
   .stat-content h3 {
-    font-size: 1.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .stat-content p {
+    font-size: 0.4rem;
   }
   
   .details-grid {
@@ -371,7 +382,24 @@
   }
   
   .stat-card {
-    padding: 16px;
+    padding: 12px;
+    width: 100%;
+    max-width: 260px;
+    height: 90px;
+  }
+  
+  .stat-icon {
+    font-size: 1.2rem;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .stat-content h3 {
+    font-size: 0.75rem;
+  }
+  
+  .stat-content p {
+    font-size: 0.35rem;
   }
   
   .detail-card {

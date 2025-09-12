@@ -45,9 +45,10 @@
   display: grid;
   grid-template-columns: 250px 1fr;
   gap: 40px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
+  width: 100%;
 }
 
 .dashboard-nav {
@@ -106,6 +107,8 @@
   border-radius: 12px;
   padding: 30px;
   min-height: 600px;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .tab-content {
@@ -172,9 +175,9 @@
   }
   
   .dashboard-nav {
-    flex-direction: row;
+    flex-direction: column;
     overflow-x: auto;
-    gap: 0;
+    gap: 5px;
   }
   
   .nav-item {

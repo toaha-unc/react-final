@@ -4,7 +4,7 @@ import { ordersAPI } from '../services/api';
 import OrderStatus from './OrderStatus';
 import './OrderList.css';
 
-const OrderList = ({ onViewOrder, onEditOrder }) => {
+const OrderList = ({ onViewOrder }) => {
   const { user, isSeller, isBuyer } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -101,11 +101,6 @@ const OrderList = ({ onViewOrder, onEditOrder }) => {
     }
   };
 
-  const handleEditOrder = (order) => {
-    if (onEditOrder) {
-      onEditOrder(order);
-    }
-  };
 
   if (loading) {
     return (
@@ -277,14 +272,6 @@ const OrderList = ({ onViewOrder, onEditOrder }) => {
                     >
                       View Details
                     </button>
-                    {isSeller && (
-                      <button 
-                        className="btn btn-secondary"
-                        onClick={() => handleEditOrder(order)}
-                      >
-                        Manage Order
-                      </button>
-                    )}
                   </div>
                 </div>
               </div>
