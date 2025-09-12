@@ -66,8 +66,8 @@ const BuyerStats = ({ stats, loading, error, onRefresh }) => {
     total_spent: 0,
     average_order_value: 0,
     last_order_date: null,
-    favorite_category: null,
-    total_reviews: 0,
+    favorite_categories: [],
+    total_reviews_given: 0,
     average_rating_given: 0
   };
 
@@ -153,7 +153,7 @@ const BuyerStats = ({ stats, loading, error, onRefresh }) => {
         <div className="stat-card secondary">
           <div className="stat-icon">⭐</div>
           <div className="stat-content">
-            <h3>{statsData.total_reviews}</h3>
+            <h3>{statsData.total_reviews_given}</h3>
             <p>Reviews Given</p>
           </div>
         </div>
@@ -161,25 +161,6 @@ const BuyerStats = ({ stats, loading, error, onRefresh }) => {
 
       <div className="stats-details">
         <div className="details-grid">
-          <div className="detail-card">
-            <h4>Recent Activity</h4>
-            <div className="detail-content">
-              <div className="detail-item">
-                <span className="detail-label">Last Order:</span>
-                <span className="detail-value">{formatDate(statsData.last_order_date)}</span>
-              </div>
-              <div className="detail-item">
-                <span className="detail-label">Favorite Category:</span>
-                <span className="detail-value">{statsData.favorite_category || 'None yet'}</span>
-              </div>
-              <div className="detail-item">
-                <span className="detail-label">Average Rating Given:</span>
-                <span className="detail-value">
-                  {statsData.average_rating_given ? `${statsData.average_rating_given.toFixed(1)}/5` : 'N/A'}
-                </span>
-              </div>
-            </div>
-          </div>
 
           <div className="detail-card">
             <h4>Order Status Breakdown</h4>

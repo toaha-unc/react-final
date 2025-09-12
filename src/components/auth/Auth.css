@@ -7,6 +7,7 @@
   justify-content: center;
   background-color: #fff;
   padding: 20px;
+  padding-top: 120px; /* Account for fixed header height */
 }
 
 .auth-card {
@@ -359,6 +360,7 @@
 @media (max-width: 768px) {
   .auth-container {
     padding: 15px;
+    padding-top: 100px; /* Slightly less padding on mobile */
   }
   
   .auth-card {
@@ -394,6 +396,10 @@
 }
 
 @media (max-width: 480px) {
+  .auth-container {
+    padding-top: 90px; /* Even less padding on very small screens */
+  }
+  
   .auth-card {
     padding: 20px 15px;
   }

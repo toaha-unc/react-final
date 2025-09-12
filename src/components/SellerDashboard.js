@@ -12,7 +12,7 @@ import './SellerDashboard.css';
 
 const SellerDashboard = () => {
   const { user, isSeller } = useAuth();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('services');
   const [dashboardData, setDashboardData] = useState({
     stats: null,
     earnings: null,
@@ -52,7 +52,6 @@ const SellerDashboard = () => {
   };
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'services', label: 'My Services', icon: '🛠️' },
     { id: 'orders', label: 'Orders', icon: '📦' },
     { id: 'reviews', label: 'Reviews', icon: '⭐' },
@@ -62,17 +61,6 @@ const SellerDashboard = () => {
 
   const renderActiveTab = () => {
     switch (activeTab) {
-      case 'overview':
-        return (
-          <SellerStats 
-            stats={dashboardData.stats}
-            earnings={dashboardData.earnings}
-            analytics={dashboardData.analytics}
-            loading={loading}
-            error={error}
-            onRefresh={fetchDashboardData}
-          />
-        );
       case 'services':
         return <SellerServices />;
       case 'orders':

@@ -35,7 +35,7 @@ const SellerReviews = () => {
       const reviewsWithServiceTitle = reviewsData.map(review => ({
         ...review,
         service_id: review.service?.id,
-        service_title: review.service?.title || 'Service Deleted'
+        service_title: review.service?.title
       }));
 
       setReviews(reviewsWithServiceTitle);

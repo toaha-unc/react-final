@@ -81,9 +81,9 @@ const Dashboard = () => {
                 <div className="card-actions">
                   <button 
                     className="btn btn-primary"
-                    onClick={() => navigate('/buyer-dashboard')}
+                    onClick={() => navigate('/reviews')}
                   >
-                    Buyer Dashboard
+                    Reviews
                   </button>
                   <button 
                     className="btn btn-secondary"
@@ -124,7 +124,6 @@ const Dashboard = () => {
                 >
                   Edit Profile
                 </button>
-                <button className="btn btn-secondary">Account Settings</button>
               </div>
             </div>
           </div>

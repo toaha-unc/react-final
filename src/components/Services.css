@@ -73,7 +73,7 @@
 
 .service-features {
   list-style: none;
-  padding: 0;
+  padding: 50px;
   margin: 0 0 30px 0;
   text-align: left;
   flex-grow: 1;

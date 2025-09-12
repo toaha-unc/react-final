@@ -141,14 +141,6 @@ const Recommendations = ({ onViewService }) => {
         </div>
       )}
 
-      <div className="recommendations-footer">
-        <button 
-          className="btn btn-secondary"
-          onClick={() => window.location.href = '/services'}
-        >
-          View All Services
-        </button>
-      </div>
     </div>
   );
 };

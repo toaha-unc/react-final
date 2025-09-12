@@ -98,12 +98,6 @@ const Header = () => {
                     Reviews
                   </button>
                   <button 
-                    className="nav-link"
-                    onClick={() => handleNavigation('/profile')}
-                  >
-                    Profile
-                  </button>
-                  <button 
                     className="nav-link logout"
                     onClick={handleLogout}
                   >

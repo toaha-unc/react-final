@@ -9,7 +9,7 @@ const Stats = () => {
       description: 'Skilled professionals ready to work'
     },
     {
-      number: '100,000+',
+      number: '10,000',
       label: 'Projects Completed',
       description: 'Successfully delivered projects'
     },

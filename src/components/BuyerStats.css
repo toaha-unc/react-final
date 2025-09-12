@@ -145,7 +145,7 @@
 }
 
 .stat-content p {
-  font-size: 0.45rem;
+  font-size: 0.8rem;
   font-weight: 500;
   margin: 0;
   opacity: 0.9;
@@ -352,11 +352,11 @@
   }
   
   .stat-content h3 {
-    font-size: 0.8rem;
+    font-size: 1.5rem;
   }
   
   .stat-content p {
-    font-size: 0.4rem;
+    font-size: 0.8rem;
   }
   
   .details-grid {
@@ -395,11 +395,11 @@
   }
   
   .stat-content h3 {
-    font-size: 0.75rem;
+    font-size: 1.3rem;
   }
   
   .stat-content p {
-    font-size: 0.35rem;
+    font-size: 0.7rem;
   }
   
   .detail-card {

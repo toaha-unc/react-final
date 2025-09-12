@@ -17,6 +17,20 @@ const SellerServices = () => {
     fetchServices();
   }, []);
 
+  // Listen for service review updates
+  useEffect(() => {
+    const handleServiceReviewUpdate = (event) => {
+      console.log('Service review submitted, refreshing seller services...', event.detail);
+      fetchServices();
+    };
+
+    window.addEventListener('serviceReviewSubmitted', handleServiceReviewUpdate);
+    
+    return () => {
+      window.removeEventListener('serviceReviewSubmitted', handleServiceReviewUpdate);
+    };
+  }, []);
+
   const fetchServices = async () => {
     try {
       setLoading(true);
@@ -117,13 +131,11 @@ const SellerServices = () => {
 
   const handleFormSubmit = async (serviceData) => {
     try {
+      // The ServiceForm component already handles the API call
+      // We just need to handle the UI updates and refresh
       if (editingService) {
-        // Update existing service via API
-        await servicesAPI.updateService(editingService.id, serviceData);
         alert('Service updated successfully!');
       } else {
-        // Create new service via API
-        await servicesAPI.createService(serviceData);
         alert('Service created successfully!');
       }
       setShowForm(false);

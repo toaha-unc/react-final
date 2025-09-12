@@ -91,6 +91,24 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
     }
   }, [serviceId, fetchServiceDetails, fetchReviews, checkUserOrderStatus]);
 
+  // Listen for service review updates
+  useEffect(() => {
+    const handleServiceReviewUpdate = (event) => {
+      // Only refresh if this is the service that was reviewed
+      if (event.detail.serviceId === serviceId) {
+        console.log('Service review submitted for this service, refreshing...', event.detail);
+        fetchServiceDetails();
+        fetchReviews();
+      }
+    };
+
+    window.addEventListener('serviceReviewSubmitted', handleServiceReviewUpdate);
+    
+    return () => {
+      window.removeEventListener('serviceReviewSubmitted', handleServiceReviewUpdate);
+    };
+  }, [serviceId, fetchServiceDetails, fetchReviews]);
+
   const formatDeliveryTime = (days) => {
     if (days === 1) return '1 day';
     if (days < 7) return `${days} days`;
@@ -110,9 +128,19 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
 
   const handleReviewSubmit = async (reviewData) => {
     try {
+      // Generate title based on rating
+      const ratingTitles = {
+        1: 'Poor experience',
+        2: 'Fair service',
+        3: 'Good service',
+        4: 'Very good service',
+        5: 'Excellent service'
+      };
+      
       // Create the review first
       const reviewResponse = await reviewsAPI.createReview(serviceId, {
         rating: reviewData.rating,
+        title: ratingTitles[reviewData.rating] || 'Service review',
         comment: reviewData.comment
       });
       
@@ -136,14 +164,6 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
     }
   };
 
-  const handleMarkHelpful = async (reviewId) => {
-    try {
-      await reviewsAPI.markHelpful(reviewId);
-      fetchReviews(); // Refresh reviews
-    } catch (error) {
-      console.error('Error marking review as helpful:', error);
-    }
-  };
 
   const handleEditService = () => {
     if (onEdit) {
@@ -199,16 +219,7 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
           ← Back to Services
         </button>
         
-        {isOwner && (
-          <div className="owner-actions">
-            <button className="btn btn-secondary" onClick={handleEditService}>
-              Edit Service
-            </button>
-            <button className="btn btn-danger" onClick={handleDeleteService}>
-              Delete Service
-            </button>
-          </div>
-        )}
+
       </div>
 
       <div className="service-details-content">
@@ -265,24 +276,24 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
                         {service.seller?.bio || 'Experienced professional providing quality services.'}
                       </div>
                     </div>
-                    <div className="seller-stats">
-                      <div className="stat">
-                        <span className="stat-value">{service.rating || 0}</span>
-                        <span className="stat-label">Rating</span>
+                      <div className="seller-stats">
+                        <div className="stat">
+                          <span className="stat-value">{service.average_rating || 0}</span>
+                          <span className="stat-label">Rating</span>
+                        </div>
+                        <div className="stat">
+                          <span className="stat-value">{service.total_reviews || 0}</span>
+                          <span className="stat-label">Reviews</span>
+                        </div>
+                        <div className="stat">
+                          <span className="stat-value">{service.orders_count || 0}</span>
+                          <span className="stat-label">Orders</span>
+                        </div>
+                        <div className="stat">
+                          <span className="stat-value">{service.seller?.response_time || 'N/A'}</span>
+                          <span className="stat-label">Response Time</span>
+                        </div>
                       </div>
-                      <div className="stat">
-                        <span className="stat-value">{service.reviews_count || 0}</span>
-                        <span className="stat-label">Reviews</span>
-                      </div>
-                      <div className="stat">
-                        <span className="stat-value">{service.orders_count || 0}</span>
-                        <span className="stat-label">Orders</span>
-                      </div>
-                      <div className="stat">
-                        <span className="stat-value">{service.seller?.response_time || 'N/A'}</span>
-                        <span className="stat-label">Response Time</span>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
@@ -312,18 +323,7 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
 
             {activeTab === 'reviews' && (
               <div className="reviews-content">
-                {user && !isSeller && userCanReview && (
-                  <div className="review-form-section">
-                    <div className="review-form-header">
-                      <h3>Write a Review</h3>
-                      <p>Share your experience with this service</p>
-                    </div>
-                    <ReviewForm 
-                      onSubmit={handleReviewSubmit}
-                      onCancel={() => setShowReviewForm(false)}
-                    />
-                  </div>
-                )}
+
 
                 {!Array.isArray(reviews) || reviews.length === 0 ? (
                   <div className="no-reviews">
@@ -335,15 +335,15 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
                 ) : (
                   <div className="reviews-list">
                     <div className="reviews-summary">
-                      <h3>Customer Reviews ({Array.isArray(reviews) ? reviews.length : 0})</h3>
-                      <div className="average-rating">
-                        <span className="rating-value">{service.rating || 0}</span>
-                        <div className="rating-stars">
-                          {'★'.repeat(Math.floor(service.rating || 0))}
-                          {'☆'.repeat(5 - Math.floor(service.rating || 0))}
+                        <h3>Customer Reviews ({Array.isArray(reviews) ? reviews.length : 0})</h3>
+                        <div className="average-rating">
+                          <span className="rating-value">{service.average_rating || 0}</span>
+                          <div className="rating-stars">
+                            {'★'.repeat(Math.floor(service.average_rating || 0))}
+                            {'☆'.repeat(5 - Math.floor(service.average_rating || 0))}
+                          </div>
+                          <span className="rating-count">({service.total_reviews || 0} reviews)</span>
                         </div>
-                        <span className="rating-count">({service.reviews_count || 0} reviews)</span>
-                      </div>
                     </div>
                     
                     {Array.isArray(reviews) && reviews.map((review) => (
@@ -370,12 +370,6 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
                                 day: 'numeric'
                               })}
                             </div>
-                            <button 
-                              className="helpful-btn"
-                              onClick={() => handleMarkHelpful(review.id)}
-                            >
-                              👍 Helpful
-                            </button>
                           </div>
                         </div>
                         <div className="review-content">

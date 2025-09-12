@@ -106,11 +106,11 @@ const ServiceCard = ({ service, onEdit, onDelete, onViewDetails }) => {
           
           <div className="service-stats">
             <div className="stat">
-              <span className="stat-value">{service.rating || 0}</span>
+              <span className="stat-value">{service.average_rating || 0}</span>
               <span className="stat-label">⭐</span>
             </div>
             <div className="stat">
-              <span className="stat-value">{service.reviews_count || 0}</span>
+              <span className="stat-value">{service.total_reviews || 0}</span>
               <span className="stat-label">reviews</span>
             </div>
             <div className="stat">

@@ -152,6 +152,36 @@ const Services = () => {
     fetchServices();
   }, []);
 
+  // Listen for service review updates
+  useEffect(() => {
+    const handleServiceReviewUpdate = (event) => {
+      console.log('Service review submitted, refreshing services...', event.detail);
+      // Re-run the fetchServices function
+      const fetchServices = async () => {
+        try {
+          setLoading(true);
+          const response = await servicesAPI.getServices({ limit: 6 });
+          const servicesData = response.data.results || response.data;
+          if (servicesData && servicesData.length > 0) {
+            const activeServices = servicesData.filter(service => service.is_active === true);
+            setServices(activeServices);
+          }
+        } catch (error) {
+          console.error('Error refreshing services:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchServices();
+    };
+
+    window.addEventListener('serviceReviewSubmitted', handleServiceReviewUpdate);
+    
+    return () => {
+      window.removeEventListener('serviceReviewSubmitted', handleServiceReviewUpdate);
+    };
+  }, []);
+
   const formatPrice = (price) => {
     if (typeof price === 'number') {
       return `Starting at BDT ${price}`;

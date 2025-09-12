@@ -72,7 +72,6 @@ export const reviewsAPI = {
   createReview: (serviceId, reviewData) => api.post(`/services/${serviceId}/reviews/create/`, reviewData),
   updateReview: (id, reviewData) => api.put(`/reviews/${id}/update/`, reviewData),
   deleteReview: (id) => api.delete(`/reviews/${id}/delete/`),
-  markHelpful: (id) => api.post(`/reviews/${id}/helpful/`),
   uploadReviewImage: (reviewId, imageData) => api.post(`/reviews/${reviewId}/images/`, imageData),
   getBuyerReviews: () => api.get('/buyer/review-history/'),
   getSellerReviews: (sellerId) => api.get(`/sellers/${sellerId}/reviews/`),
@@ -105,7 +104,7 @@ export const dashboardAPI = {
   getSellerStats: () => api.get('/seller/dashboard-stats/'),
   getSellerEarnings: () => api.get('/seller/earnings/'),
   getSellerAnalytics: () => api.get('/seller/analytics/'),
-  getBuyerStats: () => api.get('/buyer/dashboard-stats/'),
+  getBuyerStats: () => api.get('/buyer/dashboard-stats/?update=true'),
   getBuyerAnalytics: () => api.get('/buyer/analytics/'),
   getBuyerOrderHistory: () => api.get('/buyer/order-history/'),
 };

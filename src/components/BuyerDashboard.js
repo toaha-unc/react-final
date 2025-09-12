@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { dashboardAPI } from '../services/api';
+import api from '../services/api';
 import Header from './Header';
 import BuyerProfile from './BuyerProfile';
 import BuyerReviews from './BuyerReviews';
@@ -19,15 +20,51 @@ const BuyerDashboard = () => {
     fetchBuyerStats();
   }, []);
 
+  // Refresh stats when component becomes visible (user navigates back to dashboard)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && activeTab === 'overview') {
+        fetchBuyerStats();
+      }
+    };
+
+    const handleFocus = () => {
+      if (activeTab === 'overview') {
+        fetchBuyerStats();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [activeTab]);
+
   const fetchBuyerStats = async () => {
     try {
       setLoading(true);
       setError(null);
+      console.log('Fetching buyer stats...');
       const response = await dashboardAPI.getBuyerStats();
+      console.log('Buyer stats response:', response.data);
       setStats(response.data);
     } catch (error) {
       console.error('Error fetching buyer stats:', error);
-      setError('Failed to load dashboard data');
+      console.error('Error details:', error.response?.data);
+      
+      // Try fallback to original endpoint
+      try {
+        console.log('Trying fallback endpoint...');
+        const fallbackResponse = await api.get('/buyer/dashboard-stats/?update=true');
+        console.log('Fallback response:', fallbackResponse.data);
+        setStats(fallbackResponse.data);
+      } catch (fallbackError) {
+        console.error('Fallback also failed:', fallbackError);
+        setError(`Failed to load dashboard data: ${error.response?.data?.error || error.message}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -52,6 +89,14 @@ const BuyerDashboard = () => {
         return <BuyerProfile />;
       default:
         return <BuyerStats stats={stats} loading={loading} error={error} onRefresh={fetchBuyerStats} />;
+    }
+  };
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    // Refresh stats when switching to overview tab
+    if (tabId === 'overview') {
+      fetchBuyerStats();
     }
   };
 
@@ -92,7 +137,7 @@ const BuyerDashboard = () => {
                   <li key={tab.id} className="nav-item">
                     <button
                       className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={() => handleTabChange(tab.id)}
                     >
                       <span className="tab-icon">{tab.icon}</span>
                       <span className="tab-label">{tab.label}</span>

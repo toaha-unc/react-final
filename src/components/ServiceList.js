@@ -264,6 +264,20 @@ const ServiceList = ({ onEditService, onDeleteService, onViewServiceDetails }) =
     fetchAllServices();
   }, [fetchAllServices]);
 
+  // Listen for service review updates
+  useEffect(() => {
+    const handleServiceReviewUpdate = (event) => {
+      console.log('Service review submitted, refreshing services...', event.detail);
+      fetchAllServices();
+    };
+
+    window.addEventListener('serviceReviewSubmitted', handleServiceReviewUpdate);
+    
+    return () => {
+      window.removeEventListener('serviceReviewSubmitted', handleServiceReviewUpdate);
+    };
+  }, [fetchAllServices]);
+
   const getSortOrdering = (sortValue) => {
     const sortMap = {
       'newest': '-created_at',

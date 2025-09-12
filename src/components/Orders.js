@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { ordersAPI } from '../services/api';
+import { ordersAPI, reviewsAPI } from '../services/api';
 import Header from './Header';
 import OrderStatus from './OrderStatus';
 import OrderDetails from './OrderDetails';
+import ReviewForm from './ReviewForm';
 import './Orders.css';
 
 const Orders = () => {
@@ -13,6 +14,10 @@ const Orders = () => {
   const [error, setError] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   
+  // Review functionality
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewingOrder, setReviewingOrder] = useState(null);
+  const [orderReviewStatus, setOrderReviewStatus] = useState({});
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +28,12 @@ const Orders = () => {
   useEffect(() => {
     fetchOrders();
   }, [currentPage]);
+
+  useEffect(() => {
+    if (orders.length > 0 && isBuyer) {
+      checkReviewStatus();
+    }
+  }, [orders, isBuyer]);
 
   const fetchOrders = async () => {
     try {
@@ -77,6 +88,109 @@ const Orders = () => {
 
   const handleBackToList = () => {
     setSelectedOrder(null);
+  };
+
+  const checkReviewStatus = async () => {
+    if (!isBuyer) return;
+    
+    const reviewStatus = {};
+    
+    for (const order of orders) {
+      if (order.status === 'completed' || order.status === 'delivered') {
+        try {
+          // Check if user has already reviewed this service
+          const reviewsResponse = await reviewsAPI.getServiceReviews(order.service?.id);
+          const reviewsData = reviewsResponse.data?.results || reviewsResponse.data || [];
+          const userReviews = Array.isArray(reviewsData) ? 
+            reviewsData.filter(review => review.buyer?.id === user.id) : [];
+          
+          reviewStatus[order.id] = {
+            canReview: userReviews.length === 0,
+            hasReviewed: userReviews.length > 0
+          };
+        } catch (error) {
+          console.error('Error checking review status for order:', order.id, error);
+          reviewStatus[order.id] = {
+            canReview: false,
+            hasReviewed: false
+          };
+        }
+      } else {
+        reviewStatus[order.id] = {
+          canReview: false,
+          hasReviewed: false
+        };
+      }
+    }
+    
+    setOrderReviewStatus(reviewStatus);
+  };
+
+  const handleLeaveReview = (order) => {
+    setReviewingOrder(order);
+    setShowReviewForm(true);
+  };
+
+  const handleReviewSubmit = async (reviewData) => {
+    if (!reviewingOrder) return;
+    
+    try {
+      // Generate title based on rating
+      const ratingTitles = {
+        1: 'Poor experience',
+        2: 'Fair service',
+        3: 'Good service',
+        4: 'Very good service',
+        5: 'Excellent service'
+      };
+      
+      // Create the review first
+      const reviewResponse = await reviewsAPI.createReview(reviewingOrder.service.id, {
+        rating: reviewData.rating,
+        title: ratingTitles[reviewData.rating] || 'Service review',
+        comment: reviewData.comment
+      });
+      
+      // Upload images if any
+      if (reviewData.images && reviewData.images.length > 0) {
+        const reviewId = reviewResponse.data.id;
+        for (const imageFile of reviewData.images) {
+          const formData = new FormData();
+          formData.append('image', imageFile);
+          await reviewsAPI.uploadReviewImage(reviewId, formData);
+        }
+      }
+      
+      // Update review status for this order
+      setOrderReviewStatus(prev => ({
+        ...prev,
+        [reviewingOrder.id]: {
+          canReview: false,
+          hasReviewed: true
+        }
+      }));
+      
+      setShowReviewForm(false);
+      setReviewingOrder(null);
+      
+      // Trigger service data refresh by dispatching a custom event
+      window.dispatchEvent(new CustomEvent('serviceReviewSubmitted', {
+        detail: {
+          serviceId: reviewingOrder.service.id,
+          rating: reviewData.rating
+        }
+      }));
+      
+      alert('Review submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('Failed to submit review. Please try again.');
+    }
+  };
+
+  const handleReviewCancel = () => {
+    setShowReviewForm(false);
+    setReviewingOrder(null);
   };
 
 
@@ -247,6 +361,25 @@ const Orders = () => {
                         >
                           View Details
                         </button>
+                        
+                        {/* Review button for completed orders (buyers only) */}
+                        {isBuyer && (order.status === 'completed' || order.status === 'delivered') && (
+                          <>
+                            {orderReviewStatus[order.id]?.canReview && (
+                              <button 
+                                className="btn btn-secondary"
+                                onClick={() => handleLeaveReview(order)}
+                              >
+                                Leave Review
+                              </button>
+                            )}
+                            {orderReviewStatus[order.id]?.hasReviewed && (
+                              <span className="review-status">
+                                ✓ Reviewed
+                              </span>
+                            )}
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -280,6 +413,22 @@ const Orders = () => {
           )}
         </div>
       </div>
+
+      {/* Review Form Modal */}
+      {showReviewForm && reviewingOrder && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>Leave a Review</h3>
+              <p>Review for: {reviewingOrder.service?.title}</p>
+            </div>
+            <ReviewForm
+              onSubmit={handleReviewSubmit}
+              onCancel={handleReviewCancel}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

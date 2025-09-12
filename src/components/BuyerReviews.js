@@ -159,10 +159,7 @@ const BuyerReviews = () => {
           <div className="no-reviews-icon">⭐</div>
           <h3>No Reviews Found</h3>
           <p>
-            {filter === 'all' 
-              ? 'You haven\'t left any reviews yet.' 
-              : `No reviews found with ${filter} star${filter !== '1' ? 's' : ''} rating`
-            }
+            {filter !== 'all' && `No reviews found with ${filter} star${filter !== '1' ? 's' : ''} rating`}
           </p>
           <button 
             className="btn btn-primary"
