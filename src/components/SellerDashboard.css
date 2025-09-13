@@ -57,7 +57,7 @@
   border-radius: 12px;
   padding: 20px 0;
   height: fit-content;
-  position: sticky;
+  position: static;
   top: 120px;
   display: flex;
   flex-direction: column;
