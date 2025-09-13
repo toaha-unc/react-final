@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://django-final.vercel.app/api';
+const API_BASE_URL = 'https://django-final-delta.vercel.app/api';
 
 // CORS proxy for development/testing
 const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';

@@ -18,7 +18,7 @@ const Services = () => {
         
         // First try to test if API is reachable
         try {
-          const testResponse = await fetch('https://django-final.vercel.app/api/test-simple/');
+          const testResponse = await fetch('https://django-final-delta.vercel.app/api/test-simple/');
           console.log('API test response:', testResponse);
         } catch (testErr) {
           console.log('API test failed:', testErr);

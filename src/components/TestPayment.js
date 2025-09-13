@@ -21,7 +21,7 @@ const TestPayment = () => {
     // Test 2: Test CORS with simple fetch
     try {
       addResult('CORS Test', 'TESTING', 'Testing CORS with simple fetch...');
-      const response = await fetch(`https://django-final.vercel.app/api/services/${serviceId}/`, {
+      const response = await fetch(`https://django-final-delta.vercel.app/api/services/${serviceId}/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const TestPayment = () => {
     try {
       addResult('Axios Test', 'TESTING', 'Testing with axios...');
       const axios = (await import('axios')).default;
-      const response = await axios.get(`https://django-final.vercel.app/api/services/${serviceId}/`);
+      const response = await axios.get(`https://django-final-delta.vercel.app/api/services/${serviceId}/`);
       addResult('Axios Test', 'PASS', `Successfully fetched service: ${response.data.title}`);
     } catch (error) {
       addResult('Axios Test', 'FAIL', `Error: ${error.message}`);
@@ -85,7 +85,7 @@ const TestPayment = () => {
           total_amount: 100.00
         };
         
-        const orderResponse = await axios.post('https://django-final.vercel.app/api/orders/create/', orderData, {
+        const orderResponse = await axios.post('https://django-final-delta.vercel.app/api/orders/create/', orderData, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -95,7 +95,7 @@ const TestPayment = () => {
         addResult('Order Creation', 'PASS', `Order created: ${orderResponse.data.id}`);
         
         // Now test payment initiation
-        const paymentResponse = await axios.post(`https://django-final.vercel.app/api/payments/initiate/${orderResponse.data.id}/`, {}, {
+        const paymentResponse = await axios.post(`https://django-final-delta.vercel.app/api/payments/initiate/${orderResponse.data.id}/`, {}, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

@@ -79,7 +79,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
       setError(null);
       console.log('Fetching service with ID:', serviceId);
       console.log('ServiceId type:', typeof serviceId);
-      console.log('Full URL:', `https://django-final.vercel.app/api/services/${serviceId}/`);
+      console.log('Full URL:', `https://django-final-delta.vercel.app/api/services/${serviceId}/`);
       
       // Check if serviceId is valid
       if (!serviceId) {
@@ -99,7 +99,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
         
         try {
           // Try direct fetch as fallback
-          const fetchResponse = await fetch(`https://django-final.vercel.app/api/services/${serviceId}/`, {
+          const fetchResponse = await fetch(`https://django-final-delta.vercel.app/api/services/${serviceId}/`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -434,7 +434,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
     try {
       console.log('OrderForm - Initiating payment directly for order:', order.id);
       console.log('OrderForm - Order data:', order);
-      console.log('OrderForm - Payment API URL:', `https://django-final.vercel.app/api/payments/initiate/${order.id}/`);
+      console.log('OrderForm - Payment API URL:', `https://django-final-delta.vercel.app/api/payments/initiate/${order.id}/`);
       console.log('OrderForm - Authentication token for payment:', localStorage.getItem('access_token'));
       
       const response = await paymentAPI.initiatePayment(order.id);

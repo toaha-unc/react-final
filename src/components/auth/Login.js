@@ -152,18 +152,7 @@ const Login = () => {
           </p>
         </div>
 
-        <div className="test-credentials">
-          <h3>Test Credentials</h3>
-          <div className="test-user">
-            <strong>Seller:</strong> supabase_seller@example.com / seller123
-          </div>
-          <div className="test-user">
-            <strong>Buyer:</strong> supabase_buyer@example.com / buyer123
-          </div>
-          <div className="test-user">
-            <strong>Admin:</strong> admin@gmail.com / admin123
-          </div>
-        </div>
+
       </div>
     </div>
     </div>
