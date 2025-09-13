@@ -24,6 +24,7 @@ import Reviews from './components/Reviews';
 import PaymentSuccess from './components/PaymentSuccess';
 import PaymentFailed from './components/PaymentFailed';
 import TestPayment from './components/TestPayment';
+import RevenueTest from './components/RevenueTest';
 import './App.css';
 
 // Profile component that shows appropriate profile based on user role
@@ -217,6 +218,10 @@ function App() {
             <Route 
               path="/test-payment/:serviceId" 
               element={<TestPayment />} 
+            />
+            <Route 
+              path="/revenue-test" 
+              element={<RevenueTest />} 
             />
             <Route 
               path="/notifications" 

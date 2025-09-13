@@ -55,32 +55,47 @@ const SellerStats = ({ stats, earnings, analytics, loading, error, onRefresh }) 
     );
   }
 
-  // Fallback data if API doesn't return data
-  const fallbackStats = {
-    total_earnings: 12500,
-    monthly_earnings: 3200,
-    total_orders: 45,
-    completed_orders: 42,
-    pending_orders: 3,
-    total_services: 8,
-    active_services: 7,
-    average_rating: 4.8,
-    total_reviews: 38,
-    response_rate: 95.5,
-    completion_rate: 93.3
+  // Debug: Log the received data
+  console.log('SellerStats received data:', { stats, earnings, analytics });
+
+  // Map API data to display format
+  const displayStats = stats ? {
+    total_earnings: stats.analytics?.total_earnings || stats.earnings_summary?.total_earnings || 0,
+    monthly_earnings: stats.analytics?.earnings_this_month || stats.earnings_summary?.this_month || 0,
+    total_orders: stats.analytics?.total_orders || 0,
+    completed_orders: stats.analytics?.completed_orders || 0,
+    pending_orders: stats.analytics?.total_orders - stats.analytics?.completed_orders || 0,
+    total_services: stats.analytics?.total_services || 0,
+    active_services: stats.analytics?.active_services || 0,
+    average_rating: stats.analytics?.average_rating || 0,
+    total_reviews: stats.analytics?.total_reviews || 0,
+    response_rate: 95.5, // Default value
+    completion_rate: stats.performance_metrics?.completion_rate || 0
+  } : {
+    total_earnings: 0,
+    monthly_earnings: 0,
+    total_orders: 0,
+    completed_orders: 0,
+    pending_orders: 0,
+    total_services: 0,
+    active_services: 0,
+    average_rating: 0,
+    total_reviews: 0,
+    response_rate: 0,
+    completion_rate: 0
   };
 
-  const displayStats = stats || fallbackStats;
   const displayEarnings = earnings || { 
-    total_earnings: 12500, 
-    monthly_earnings: 3200, 
-    weekly_earnings: 800 
+    total_earnings: displayStats.total_earnings,
+    monthly_earnings: displayStats.monthly_earnings, 
+    weekly_earnings: 0 
   };
+  
   const displayAnalytics = analytics || {
-    orders_this_month: 12,
-    orders_last_month: 8,
-    revenue_growth: 15.2,
-    completion_rate: 93.3
+    orders_this_month: stats?.analytics?.orders_this_month || 0,
+    orders_last_month: 0, // Not available in current API
+    revenue_growth: 0, // Not available in current API
+    completion_rate: displayStats.completion_rate
   };
 
   return (

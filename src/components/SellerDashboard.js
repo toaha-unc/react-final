@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { dashboardAPI } from '../services/api';
 import Header from './Header';
-import SellerStats from './SellerStats';
 import SellerServices from './SellerServices';
 import SellerOrders from './SellerOrders';
 import SellerReviews from './SellerReviews';
@@ -38,11 +37,14 @@ const SellerDashboard = () => {
         dashboardAPI.getSellerAnalytics()
       ]);
 
-      setDashboardData({
+      const dashboardData = {
         stats: statsResponse.status === 'fulfilled' ? statsResponse.value.data : null,
         earnings: earningsResponse.status === 'fulfilled' ? earningsResponse.value.data : null,
         analytics: analyticsResponse.status === 'fulfilled' ? analyticsResponse.value.data : null
-      });
+      };
+      
+      console.log('Dashboard data fetched:', dashboardData);
+      setDashboardData(dashboardData);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
       setError('Failed to load dashboard data. Please try again.');
@@ -64,7 +66,7 @@ const SellerDashboard = () => {
       case 'services':
         return <SellerServices />;
       case 'orders':
-        return <SellerOrders />;
+        return <SellerOrders dashboardData={dashboardData} />;
       case 'reviews':
         return <SellerReviews />;
       case 'payments':

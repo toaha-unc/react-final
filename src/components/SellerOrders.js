@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import OrderStatus from './OrderStatus';
 import './SellerOrders.css';
 
-const SellerOrders = () => {
+const SellerOrders = ({ dashboardData }) => {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -178,9 +178,32 @@ const SellerOrders = () => {
     const pending = orders.filter(o => o.status === 'pending').length;
     const inProgress = orders.filter(o => o.status === 'in_progress').length;
     const completed = orders.filter(o => o.status === 'completed').length;
-    const totalRevenue = orders
-      .filter(o => o.status === 'completed')
-      .reduce((sum, o) => sum + o.total_amount, 0);
+    
+    // Use API data if available, otherwise calculate locally
+    let totalRevenue = 0;
+    
+    // Debug: Log dashboard data
+    console.log('SellerOrders dashboardData:', dashboardData);
+    
+    // Try to get revenue from dashboard data first
+    if (dashboardData?.stats?.earnings_summary?.total_earnings) {
+      totalRevenue = dashboardData.stats.earnings_summary.total_earnings;
+      console.log('Using earnings_summary total_earnings:', totalRevenue);
+    } else if (dashboardData?.stats?.analytics?.total_earnings) {
+      totalRevenue = dashboardData.stats.analytics.total_earnings;
+      console.log('Using analytics total_earnings:', totalRevenue);
+    } else {
+      // Fallback: Calculate net revenue after platform fee (10%)
+      totalRevenue = orders
+        .filter(o => o.status === 'completed')
+        .reduce((sum, o) => {
+          const grossAmount = parseFloat(o.total_amount) || 0;
+          const platformFee = grossAmount * 0.10; // 10% platform fee
+          const netAmount = grossAmount - platformFee;
+          return sum + netAmount;
+        }, 0);
+      console.log('Using calculated revenue:', totalRevenue);
+    }
 
     return { total, pending, inProgress, completed, totalRevenue };
   };

@@ -191,7 +191,7 @@ const BuyerReviews = () => {
                     {review.service?.title || 'Service Review'}
                   </h3>
                   <p className="service-seller">
-                    by {review.service?.seller?.first_name} {review.service?.seller?.last_name}
+                    by {review.seller?.first_name} {review.seller?.last_name}
                   </p>
                 </div>
                 <div className="review-rating">
