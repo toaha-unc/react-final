@@ -399,10 +399,9 @@ const OrderForm = ({ onSuccess, onCancel }) => {
       if (data.redirect_url) {
         console.log('Payment data received, redirect URL:', data.redirect_url);
         
-        // For testing, redirect directly to success page
-        // In production, you would redirect to SSLCommerz payment page
-        console.log('Redirecting to payment success page for testing...');
-        window.location.href = 'http://localhost:3000/payment-success';
+        // Redirect to SSLCommerz payment page
+        console.log('Redirecting to SSLCommerz payment page...');
+        window.location.href = data.redirect_url;
       } else {
         console.error('No redirect URL in payment response:', data);
         setError('Payment initialization failed. Please try again.');
