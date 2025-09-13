@@ -49,7 +49,7 @@ const CTA = () => {
                 <button className="form-btn" onClick={handleSignUpClick}>Sign Up</button>
               </div>
               <div className="card-footer">
-                <p>Already have an account? <a href="#login">Sign in</a></p>
+                <p>Already have an account? <a href="/login">Sign in</a></p>
               </div>
             </div>
           </div>
