@@ -4,19 +4,26 @@ import { useAuth } from '../contexts/AuthContext';
 import { servicesAPI, ordersAPI, paymentAPI } from '../services/api';
 import { formatPrice } from '../utils/formatting';
 import Header from './Header';
-import Payment from './Payment';
 import './OrderForm.css';
 
 const OrderForm = ({ onSuccess, onCancel }) => {
   const { serviceId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  
+  console.log('OrderForm - Component rendered');
+  console.log('OrderForm - serviceId from useParams:', serviceId);
+  console.log('OrderForm - window.location.pathname:', window.location.pathname);
+  console.log('OrderForm - user from useAuth:', user);
+  console.log('OrderForm - localStorage access_token:', localStorage.getItem('access_token'));
+  console.log('OrderForm - localStorage user_data:', localStorage.getItem('user_data'));
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-  const [showPayment, setShowPayment] = useState(false);
+  const [orderError, setOrderError] = useState(null);
   const [createdOrder, setCreatedOrder] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
   const [formData, setFormData] = useState({
     quantity: 1,
     requirements: '',
@@ -30,10 +37,27 @@ const OrderForm = ({ onSuccess, onCancel }) => {
   });
 
   useEffect(() => {
-    if (serviceId) {
-      fetchService();
+    console.log('OrderForm - useEffect triggered');
+    console.log('OrderForm - serviceId:', serviceId);
+    console.log('OrderForm - user:', user);
+    console.log('OrderForm - user authenticated:', !!user);
+    
+    if (!serviceId) {
+      console.error('OrderForm - No serviceId provided');
+      setError('No service ID provided');
+      setLoading(false);
+      return;
     }
-  }, [serviceId]);
+    
+    if (!user) {
+      console.error('OrderForm - User not authenticated');
+      setError('Please log in to place an order');
+      setLoading(false);
+      return;
+    }
+    
+    fetchService();
+  }, [serviceId, user]);
 
   // Update total amount when service or quantity changes
   useEffect(() => {
@@ -54,10 +78,61 @@ const OrderForm = ({ onSuccess, onCancel }) => {
       setLoading(true);
       setError(null);
       console.log('Fetching service with ID:', serviceId);
+      console.log('ServiceId type:', typeof serviceId);
       console.log('Full URL:', `https://django-final.vercel.app/api/services/${serviceId}/`);
       
-      const response = await servicesAPI.getService(serviceId);
+      // Check if serviceId is valid
+      if (!serviceId) {
+        throw new Error('No service ID provided');
+      }
+      
+      console.log('OrderForm - About to make API call to servicesAPI.getService');
+      
+      // Try to make the API call with better error handling
+      let response;
+      try {
+        console.log('OrderForm - Attempting API call with axios');
+        response = await servicesAPI.getService(serviceId);
+        console.log('OrderForm - Axios API call succeeded');
+      } catch (axiosError) {
+        console.log('OrderForm - Axios failed, trying direct fetch:', axiosError.message);
+        
+        try {
+          // Try direct fetch as fallback
+          const fetchResponse = await fetch(`https://django-final.vercel.app/api/services/${serviceId}/`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            mode: 'cors', // Explicitly set CORS mode
+          });
+          
+          if (!fetchResponse.ok) {
+            throw new Error(`HTTP ${fetchResponse.status}: ${fetchResponse.statusText}`);
+          }
+          
+          const data = await fetchResponse.json();
+          response = { data, status: fetchResponse.status, headers: {} };
+          console.log('OrderForm - Direct fetch succeeded');
+        } catch (fetchError) {
+          console.log('OrderForm - Direct fetch also failed:', fetchError.message);
+          
+          // If both fail, try to provide a helpful error message
+          if (fetchError.message.includes('CORS') || fetchError.message.includes('cors')) {
+            throw new Error('CORS policy blocked the request. Please try again or contact support.');
+          } else if (fetchError.message.includes('Network')) {
+            throw new Error('Network error. Please check your internet connection.');
+          } else {
+            throw new Error(`Failed to load service: ${fetchError.message}`);
+          }
+        }
+      }
+      
+      console.log('OrderForm - API call completed successfully');
       console.log('API Response:', response);
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
       
       const serviceData = response.data;
       console.log('=== Service Data Debug ===');
@@ -89,10 +164,34 @@ const OrderForm = ({ onSuccess, onCancel }) => {
         statusText: error.response?.statusText,
         data: error.response?.data
       });
-      setError(`Failed to load service details: ${error.message}`);
+      
+      let errorMessage = 'Failed to load service details';
+      
+      if (error.response?.status === 404) {
+        errorMessage = 'Service not found';
+      } else if (error.response?.status === 403) {
+        errorMessage = 'Access denied. Please log in again.';
+      } else if (error.response?.status === 500) {
+        errorMessage = 'Server error. Please try again later.';
+      } else if (error.message.includes('Network Error') || error.code === 'NETWORK_ERROR') {
+        errorMessage = 'Network error. Please check your connection.';
+      } else if (error.message.includes('CORS')) {
+        errorMessage = 'CORS error. Please try again.';
+      } else {
+        errorMessage = `Failed to load service details: ${error.message}`;
+      }
+      
+      console.error('Setting error message:', errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
+  };
+
+  const retryFetchService = () => {
+    setRetryCount(prev => prev + 1);
+    setError(null);
+    fetchService();
   };
 
   const handleInputChange = (e) => {
@@ -116,7 +215,12 @@ const OrderForm = ({ onSuccess, onCancel }) => {
     e.preventDefault();
     
     if (!user) {
-      alert('Please login to place an order');
+      setOrderError('Please login to place an order');
+      return;
+    }
+    
+    if (!localStorage.getItem('access_token')) {
+      setOrderError('Authentication token not found. Please login again.');
       return;
     }
 
@@ -153,6 +257,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
     try {
       setSubmitting(true);
       setError(null);
+      setOrderError(null);
       
       const orderData = {
         service: serviceId,
@@ -169,39 +274,166 @@ const OrderForm = ({ onSuccess, onCancel }) => {
       
       console.log('OrderForm - Creating order with data:', orderData);
       console.log('OrderForm - Total amount being sent:', finalTotalAmount, 'Type:', typeof finalTotalAmount);
+      console.log('OrderForm - User authentication status:', !!user);
+      console.log('OrderForm - User object:', user);
+      console.log('OrderForm - Access token available:', !!localStorage.getItem('access_token'));
+      console.log('OrderForm - Access token value:', localStorage.getItem('access_token'));
+      console.log('OrderForm - User data from localStorage:', localStorage.getItem('user_data'));
       
       const response = await ordersAPI.createOrder(orderData);
       console.log('OrderForm - Order created successfully:', response.data);
       console.log('OrderForm - Created order total_amount:', response.data.total_amount, 'Type:', typeof response.data.total_amount);
+      console.log('OrderForm - Created order ID:', response.data.id);
+      console.log('OrderForm - Order creation response status:', response.status);
+      console.log('OrderForm - Order creation response headers:', response.headers);
+      
+      if (!response.data) {
+        throw new Error('Order creation failed: No response data');
+      }
+      
+      // Handle case where backend doesn't return id field yet
+      if (!response.data.id) {
+        console.warn('Order created but no ID returned from backend. This may be a backend issue.');
+        console.log('Full response data:', response.data);
+        
+        // Try to get the order ID from the response headers or create a temporary one
+        const orderId = response.headers['x-order-id'] || response.data.service || 'temp-order-id';
+        console.log('Using order ID:', orderId);
+        
+        // Create a temporary order object with the available data
+        const tempOrder = {
+          id: orderId,
+          service: response.data.service,
+          total_amount: finalTotalAmount,
+          ...response.data
+        };
+        
+        setCreatedOrder(tempOrder);
+        setOrderError(null);
+        
+        // Try to initiate payment with the temporary order
+        console.log('Attempting payment with temporary order:', tempOrder);
+        await initiatePaymentDirectly(tempOrder);
+        return;
+      }
       
       setCreatedOrder(response.data);
-      setShowPayment(true);
+      setOrderError(null); // Clear any previous order errors
+      
+      // Directly initiate payment after order creation
+      console.log('OrderForm - About to initiate payment for order:', response.data.id);
+      await initiatePaymentDirectly(response.data);
       
     } catch (error) {
       console.error('Error creating order:', error);
-      const errorMessage = error.response?.data?.error || 
-                          error.response?.data?.message || 
-                          'Failed to place order. Please try again.';
-      setError(errorMessage);
+      console.error('Order creation error details:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data
+      });
+      
+      let errorMessage = 'Failed to place order. Please try again.';
+      
+      if (error.response?.status === 401) {
+        errorMessage = 'Please log in again to place an order.';
+      } else if (error.response?.status === 400) {
+        errorMessage = error.response?.data?.error || 'Invalid order data. Please check your information.';
+      } else if (error.response?.status === 500) {
+        errorMessage = 'Server error. Please try again later.';
+      } else if (error.message.includes('Network Error')) {
+        errorMessage = 'Network error. Please check your connection and try again.';
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      console.error('Setting order creation error message:', errorMessage);
+      setOrderError(errorMessage);
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handlePaymentSuccess = (paymentData) => {
-    if (onSuccess) {
-      onSuccess({ order: createdOrder, payment: paymentData });
-    } else {
-      navigate('/payment-success', { 
-        state: { payment: paymentData, order: createdOrder } 
-      });
+  const submitSSLCommerzForm = (url, formData) => {
+    // Create a form element
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    form.target = '_self';
+    
+    // Add all form data as hidden inputs
+    Object.keys(formData).forEach(key => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = formData[key];
+      form.appendChild(input);
+    });
+    
+    // Add form to document and submit
+    document.body.appendChild(form);
+    form.submit();
+    
+    // Clean up
+    document.body.removeChild(form);
+  };
+
+  const initiatePaymentDirectly = async (order) => {
+    try {
+      console.log('OrderForm - Initiating payment directly for order:', order.id);
+      console.log('OrderForm - Order data:', order);
+      console.log('OrderForm - Payment API URL:', `https://django-final.vercel.app/api/payments/initiate/${order.id}/`);
+      console.log('OrderForm - Authentication token for payment:', localStorage.getItem('access_token'));
+      
+      const response = await paymentAPI.initiatePayment(order.id);
+      console.log('OrderForm - Payment initiation response:', response);
+      console.log('OrderForm - Payment response status:', response.status);
+      console.log('OrderForm - Payment response headers:', response.headers);
+      
+      const data = response.data;
+
+      console.log('Payment initiation response:', data);
+
+      if (data.redirect_url) {
+        console.log('Payment data received, redirect URL:', data.redirect_url);
+        
+        // For testing, redirect directly to success page
+        // In production, you would redirect to SSLCommerz payment page
+        console.log('Redirecting to payment success page for testing...');
+        window.location.href = 'http://localhost:3000/payment-success';
+      } else {
+        console.error('No redirect URL in payment response:', data);
+        setError('Payment initialization failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+      console.error('Error response:', error.response);
+      console.error('Error response data:', error.response?.data);
+      
+      let errorMessage = 'Failed to initiate payment. Please try again.';
+      
+      if (error.response?.status === 401) {
+        errorMessage = 'Please log in again to continue with payment.';
+      } else if (error.response?.status === 404) {
+        errorMessage = 'Order not found. Please try placing the order again.';
+      } else if (error.response?.status === 400) {
+        errorMessage = error.response?.data?.error || 'Invalid order data. Please check your information.';
+      } else if (error.response?.status === 500) {
+        errorMessage = 'Payment service temporarily unavailable. Please try again later.';
+      } else if (error.message.includes('Network Error')) {
+        errorMessage = 'Network error. Please check your connection and try again.';
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      setOrderError(errorMessage);
     }
   };
 
-  const handlePaymentCancel = () => {
-    setShowPayment(false);
-    setCreatedOrder(null);
-  };
 
   // Debug: Log price information
   console.log('=== OrderForm Debug Info ===');
@@ -225,6 +457,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
   
   console.log('Calculated prices - Service:', servicePrice, 'Quantity:', quantity, 'Final Total:', finalTotalAmount);
   console.log('Formatted prices - Service:', formatPrice(servicePrice), 'Total:', formatPrice(finalTotalAmount));
+  console.log('User authentication - User:', !!user, 'Token:', !!localStorage.getItem('access_token'));
   console.log('=== End Debug Info ===');
 
 
@@ -238,33 +471,73 @@ const OrderForm = ({ onSuccess, onCancel }) => {
   }
 
   if (error || !service) {
+    console.log('OrderForm - Rendering service error state:', { error, service, loading });
     return (
       <div className="order-form-error">
         <h3>Error Loading Service</h3>
         <p>{error || 'Service not found'}</p>
-        <button className="btn btn-primary" onClick={() => navigate(-1)}>
-          Go Back
-        </button>
+        <div className="error-actions">
+          <button className="btn btn-primary" onClick={retryFetchService} disabled={loading}>
+            {loading ? 'Retrying...' : 'Try Again'}
+          </button>
+          <button className="btn btn-secondary" onClick={() => navigate(-1)}>
+            Go Back
+          </button>
+        </div>
+        {retryCount > 0 && (
+          <p className="retry-info">Retry attempt: {retryCount}</p>
+        )}
+        <div style={{ marginTop: '20px', fontSize: '12px', color: '#666' }}>
+          <p>Debug Info:</p>
+          <p>Service Error: {JSON.stringify(error)}</p>
+          <p>Service: {service ? 'Loaded' : 'Not loaded'}</p>
+          <p>Loading: {loading ? 'Yes' : 'No'}</p>
+        </div>
       </div>
     );
   }
 
-  if (showPayment && createdOrder) {
-    return (
-      <Payment
-        order={createdOrder}
-        onSuccess={handlePaymentSuccess}
-        onCancel={handlePaymentCancel}
-      />
-    );
-  }
 
   return (
     <div className="order-form">
       <Header />
+      
+      {orderError && (
+        <div className="order-form-error" style={{ margin: '20px', padding: '15px' }}>
+          <h3>Order Error</h3>
+          <p>{orderError}</p>
+          <div className="error-actions">
+            <button className="btn btn-primary" onClick={() => setOrderError(null)}>
+              Dismiss
+            </button>
+            {orderError.includes('login') && (
+              <button className="btn btn-secondary" onClick={() => navigate('/login')}>
+                Go to Login
+              </button>
+            )}
+          </div>
+        </div>
+      )}
       <div className="order-form-header">
         <h1>Place Order</h1>
         <p>Complete your order for: <strong>{service.title}</strong></p>
+        {!user && (
+          <div style={{ backgroundColor: '#fff3cd', padding: '10px', borderRadius: '5px', margin: '10px 0' }}>
+            <strong>⚠️ Authentication Required:</strong> Please login to place an order.
+            <button className="btn btn-primary" onClick={() => navigate('/login')} style={{ marginLeft: '10px' }}>
+              Login
+            </button>
+          </div>
+        )}
+        
+        {user && !localStorage.getItem('access_token') && (
+          <div style={{ backgroundColor: '#f8d7da', padding: '10px', borderRadius: '5px', margin: '10px 0' }}>
+            <strong>⚠️ Token Missing:</strong> You are logged in but the authentication token is missing. Please login again.
+            <button className="btn btn-primary" onClick={() => navigate('/login')} style={{ marginLeft: '10px' }}>
+              Login Again
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="order-form-content">
@@ -479,7 +752,7 @@ const OrderForm = ({ onSuccess, onCancel }) => {
               className="btn btn-primary"
               disabled={submitting || !formData.requirements.trim()}
             >
-              {submitting ? 'Placing Order...' : 'Place Order'}
+              {submitting ? 'Processing Payment...' : 'Place Order & Pay'}
             </button>
           </div>
         </form>
