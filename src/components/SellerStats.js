@@ -1,7 +1,7 @@
 import React from 'react';
 import './SellerStats.css';
 
-const SellerStats = ({ stats, earnings, analytics, loading, error, onRefresh }) => {
+const SellerStats = ({ stats, earnings, analytics, loading, error, onRefresh, onNavigateToPayments }) => {
   const formatCurrency = (amount) => {
     // Handle null, undefined, or invalid amounts
     if (amount === null || amount === undefined || isNaN(amount)) {
@@ -194,6 +194,10 @@ const SellerStats = ({ stats, earnings, analytics, loading, error, onRefresh }) 
           <button className="action-btn">
             <span className="action-icon">➕</span>
             <span className="action-text">Create New Service</span>
+          </button>
+          <button className="action-btn" onClick={onNavigateToPayments}>
+            <span className="action-icon">💳</span>
+            <span className="action-text">Payment History</span>
           </button>
           <button className="action-btn">
             <span className="action-icon">📦</span>

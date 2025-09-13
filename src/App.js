@@ -8,7 +8,6 @@ import EmailVerification from './components/auth/EmailVerification';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Dashboard from './components/Dashboard';
 import SellerDashboard from './components/SellerDashboard';
-import BuyerDashboard from './components/BuyerDashboard';
 import ServiceList from './components/ServiceList';
 import ServiceForm from './components/ServiceForm';
 import ServiceDetails from './components/ServiceDetails';
@@ -17,10 +16,10 @@ import OrderDetails from './components/OrderDetails';
 import OrderForm from './components/OrderForm';
 import Orders from './components/Orders';
 import Notifications from './components/Notifications';
-import Recommendations from './components/Recommendations';
 import BuyerProfile from './components/BuyerProfile';
 import SellerProfile from './components/SellerProfile';
 import Reviews from './components/Reviews';
+import PaymentHistoryPage from './components/PaymentHistoryPage';
 import PaymentSuccess from './components/PaymentSuccess';
 import PaymentFailed from './components/PaymentFailed';
 import TestPayment from './components/TestPayment';
@@ -172,14 +171,6 @@ function App() {
               } 
             />
             <Route 
-              path="/buyer-dashboard" 
-              element={
-                <ProtectedRoute>
-                  <BuyerDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
               path="/services" 
               element={
                 <ProtectedRoute>
@@ -244,6 +235,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Reviews />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/payments" 
+              element={
+                <ProtectedRoute>
+                  <PaymentHistoryPage />
                 </ProtectedRoute>
               } 
             />

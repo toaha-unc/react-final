@@ -1,0 +1,20 @@
+/* Payment History Page Styles */
+.payment-history-page {
+  min-height: 100vh;
+  background-color: #fff;
+  padding-top: 100px;
+}
+
+.payment-history-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 40px 0;
+  border-bottom: 2px solid #000;
+}
+
+.payment-history-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}

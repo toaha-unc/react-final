@@ -131,17 +131,26 @@ export const statsAPI = {
 
 // Payment API
 export const paymentAPI = {
-  getPayments: (params) => api.get('/payments/', { params }),
-  getPayment: (id) => api.get(`/payments/${id}/`),
-  createPayment: (paymentData) => api.post('/payments/create/', paymentData),
-  getPaymentStats: () => api.get('/payments/stats/'),
-  getPaymentMethods: () => api.get('/payments/methods/'),
-  createPaymentMethod: (methodData) => api.post('/payments/methods/', methodData),
-  updatePaymentMethod: (id, methodData) => api.put(`/payments/methods/${id}/`, methodData),
-  deletePaymentMethod: (id) => api.delete(`/payments/methods/${id}/`),
+  // Legacy payment endpoints (commented out as they don't exist)
+  // getPayments: (params) => api.get('/payments/', { params }),
+  // getPayment: (id) => api.get(`/payments/${id}/`),
+  // createPayment: (paymentData) => api.post('/payments/create/', paymentData),
+  // getPaymentStats: () => api.get('/payments/stats/'),
+  // getPaymentMethods: () => api.get('/payments/methods/'),
+  // createPaymentMethod: (methodData) => api.post('/payments/methods/', methodData),
+  // updatePaymentMethod: (id, methodData) => api.put(`/payments/methods/${id}/`, methodData),
+  // deletePaymentMethod: (id) => api.delete(`/payments/methods/${id}/`),
+  // getSSLCommerzMethods: (paymentId) => api.get(`/payments/${paymentId}/methods/`),
+  // createRefund: (paymentId, refundData) => api.post(`/payments/${paymentId}/refund/`, refundData),
+  
+  // New payment history endpoints based on orders
+  getBuyerPaymentHistory: (params) => api.get('/buyer/payment-history/', { params }),
+  getBuyerPaymentStats: () => api.get('/buyer/payment-stats/'),
+  getSellerPaymentHistory: (params) => api.get('/seller/payment-history/', { params }),
+  getSellerPaymentStats: () => api.get('/seller/payment-stats/'),
+  
+  // Payment initiation (still works)
   initiatePayment: (orderId) => api.post(`/payments/initiate/${orderId}/`),
-  getSSLCommerzMethods: (paymentId) => api.get(`/payments/${paymentId}/methods/`),
-  createRefund: (paymentId, refundData) => api.post(`/payments/${paymentId}/refund/`, refundData),
 };
 
 export default api;

@@ -7,7 +7,6 @@ import SellerOrders from './SellerOrders';
 import SellerReviews from './SellerReviews';
 import SellerProfile from './SellerProfile';
 import PaymentHistory from './PaymentHistory';
-import RevenueTest from './RevenueTest';
 import './SellerDashboard.css';
 
 const SellerDashboard = () => {
@@ -63,9 +62,12 @@ const SellerDashboard = () => {
     { id: 'orders', label: 'Orders', icon: '📦' },
     { id: 'reviews', label: 'Reviews', icon: '⭐' },
     { id: 'payments', label: 'Payments', icon: '💳' },
-    { id: 'profile', label: 'Profile', icon: '👤' },
-    { id: 'debug', label: 'Debug', icon: '🐛' }
+    { id: 'profile', label: 'Profile', icon: '👤' }
   ];
+
+  const handleNavigateToPayments = () => {
+    setActiveTab('payments');
+  };
 
   const renderActiveTab = () => {
     switch (activeTab) {
@@ -79,10 +81,8 @@ const SellerDashboard = () => {
         return <PaymentHistory />;
       case 'profile':
         return <SellerProfile />;
-      case 'debug':
-        return <RevenueTest />;
       default:
-        return null;
+        return <SellerServices />;
     }
   };
 

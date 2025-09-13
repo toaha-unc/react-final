@@ -2,13 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from './Header';
-import Recommendations from './Recommendations';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const { user, isSeller, isBuyer } = useAuth();
   const navigate = useNavigate();
 
+  const handleViewPayments = () => {
+    navigate('/payments');
+  };
 
   return (
     <div className="dashboard">
@@ -81,6 +83,18 @@ const Dashboard = () => {
                 <div className="card-actions">
                   <button 
                     className="btn btn-primary"
+                    onClick={() => navigate('/orders')}
+                  >
+                    Order History
+                  </button>
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={handleViewPayments}
+                  >
+                    Payment History
+                  </button>
+                  <button 
+                    className="btn btn-secondary"
                     onClick={() => navigate('/reviews')}
                   >
                     Reviews
@@ -90,12 +104,6 @@ const Dashboard = () => {
                     onClick={() => navigate('/services')}
                   >
                     Browse Services
-                  </button>
-                  <button 
-                    className="btn btn-secondary"
-                    onClick={() => navigate('/orders')}
-                  >
-                    Order History
                   </button>
                 </div>
               </div>
@@ -128,12 +136,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Recommendations for buyers */}
-          {isBuyer && (
-            <div className="recommendations-section">
-              <Recommendations />
-            </div>
-          )}
         </div>
       </div>
     </div>

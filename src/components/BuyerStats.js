@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './BuyerStats.css';
 
-const BuyerStats = ({ stats, loading, error, onRefresh }) => {
+const BuyerStats = ({ stats, loading, error, onRefresh, onNavigateToPayments }) => {
   const navigate = useNavigate();
 
   if (loading) {
@@ -78,6 +78,13 @@ const BuyerStats = ({ stats, loading, error, onRefresh }) => {
       icon: '🔍',
       action: () => navigate('/services'),
       color: 'primary'
+    },
+    {
+      title: 'Payment History',
+      description: 'View transaction history',
+      icon: '💳',
+      action: () => onNavigateToPayments && onNavigateToPayments(),
+      color: 'secondary'
     },
     {
       title: 'View Orders',
