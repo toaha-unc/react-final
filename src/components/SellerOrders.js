@@ -12,10 +12,117 @@ const SellerOrders = ({ dashboardData }) => {
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('created_at');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const ordersPerPage = 12;
+  
+  // Order statistics (totals across all pages)
+  const [orderStats, setOrderStats] = useState({
+    total: 0,
+    pending: 0,
+    inProgress: 0,
+    completed: 0,
+    totalRevenue: 0
+  });
 
   useEffect(() => {
     fetchOrders();
+  }, [filter, sortBy, currentPage]);
+
+  // Fetch stats separately - only when filter changes, not on page changes
+  useEffect(() => {
+    if (user?.id) {
+      fetchOrderStats();
+    }
+  }, [filter, sortBy, user?.id]);
+
+  // Reset to page 1 when filter or sort changes
+  useEffect(() => {
+    setCurrentPage(1);
   }, [filter, sortBy]);
+
+  const fetchOrderStats = async () => {
+    try {
+      console.log('Fetching order stats for seller:', user?.id);
+      
+      // Get all orders by fetching all pages
+      let allOrders = [];
+      let currentPage = 1;
+      let hasMorePages = true;
+      
+      while (hasMorePages) {
+        const params = {
+          seller: user?.id,
+          page: currentPage,
+          page_size: 100, // Reasonable page size
+        };
+
+        const response = await ordersAPI.getOrders(params);
+        const ordersData = response.data?.results || response.data || [];
+        
+        if (Array.isArray(ordersData) && ordersData.length > 0) {
+          allOrders = [...allOrders, ...ordersData];
+          currentPage++;
+          
+          // Check if there are more pages
+          const totalCount = response.data?.count || 0;
+          const totalPages = Math.ceil(totalCount / 100);
+          hasMorePages = currentPage <= totalPages;
+        } else {
+          hasMorePages = false;
+        }
+      }
+      
+      console.log('All orders fetched for stats:', allOrders.length);
+      
+      if (allOrders.length > 0) {
+        const stats = {
+          total: allOrders.length,
+          pending: allOrders.filter(o => shouldShowStartWorkButton(o)).length,
+          inProgress: allOrders.filter(o => o.status?.toString().toLowerCase().trim() === 'in_progress').length,
+          completed: allOrders.filter(o => o.status?.toString().toLowerCase().trim() === 'completed').length,
+          totalRevenue: 0
+        };
+
+        // Calculate total revenue from completed orders
+        stats.totalRevenue = allOrders
+          .filter(o => o.status?.toString().toLowerCase().trim() === 'completed')
+          .reduce((sum, o) => {
+            const grossAmount = parseFloat(o.total_amount) || 0;
+            const platformFee = grossAmount * 0.10; // 10% platform fee
+            const netAmount = grossAmount - platformFee;
+            return sum + netAmount;
+          }, 0);
+
+        console.log('Calculated stats from all orders:', stats);
+        setOrderStats(stats);
+      } else {
+        console.log('No orders found');
+        // Set empty stats
+        setOrderStats({
+          total: 0,
+          pending: 0,
+          inProgress: 0,
+          completed: 0,
+          totalRevenue: 0
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching order stats:', error);
+      console.error('Error details:', error.response?.data || error.message);
+      // Set empty stats on error
+      setOrderStats({
+        total: 0,
+        pending: 0,
+        inProgress: 0,
+        completed: 0,
+        totalRevenue: 0
+      });
+    }
+  };
 
   const fetchOrders = async () => {
     try {
@@ -25,6 +132,8 @@ const SellerOrders = ({ dashboardData }) => {
       const params = {
         seller: user?.id,
         ordering: sortBy === 'created_at' ? '-created_at' : sortBy,
+        page: currentPage,
+        page_size: ordersPerPage,
       };
 
       if (filter !== 'all') {
@@ -34,6 +143,12 @@ const SellerOrders = ({ dashboardData }) => {
       const response = await ordersAPI.getOrders(params);
       const ordersData = response.data?.results || response.data || [];
       setOrders(Array.isArray(ordersData) ? ordersData : []);
+      
+      // Update pagination info
+      if (response.data?.count !== undefined) {
+        setTotalOrders(response.data.count);
+        setTotalPages(Math.ceil(response.data.count / ordersPerPage));
+      }
     } catch (error) {
       console.error('Error fetching orders:', error);
       setError('Failed to load orders. Please try again.');
@@ -173,39 +288,83 @@ const SellerOrders = ({ dashboardData }) => {
     setSelectedOrder(null);
   };
 
-  const getOrderStats = () => {
-    const total = orders.length;
-    const pending = orders.filter(o => o.status === 'pending').length;
-    const inProgress = orders.filter(o => o.status === 'in_progress').length;
-    const completed = orders.filter(o => o.status === 'completed').length;
+  // Helper function to check if an order should show "Start Work" button
+  const shouldShowStartWorkButton = (order) => {
+    const normalizedStatus = order.status?.toString().toLowerCase().trim();
     
-    // Use API data if available, otherwise calculate locally
-    let totalRevenue = 0;
+    // Check for exact matches
+    const exactMatches = normalizedStatus === 'pending' || 
+                        normalizedStatus === 'pending_approval' || 
+                        normalizedStatus === 'awaiting_approval' ||
+                        normalizedStatus === 'new' ||
+                        normalizedStatus === 'created' ||
+                        normalizedStatus === 'waiting' ||
+                        normalizedStatus === 'initial' ||
+                        normalizedStatus === 'submitted';
     
-    // Debug: Log dashboard data
-    console.log('SellerOrders dashboardData:', dashboardData);
+    // If exact match found, return true
+    if (exactMatches) return true;
     
-    // Try to get revenue from dashboard data first
-    if (dashboardData?.stats?.earnings_summary?.total_earnings) {
-      totalRevenue = dashboardData.stats.earnings_summary.total_earnings;
-      console.log('Using earnings_summary total_earnings:', totalRevenue);
-    } else if (dashboardData?.stats?.analytics?.total_earnings) {
-      totalRevenue = dashboardData.stats.analytics.total_earnings;
-      console.log('Using analytics total_earnings:', totalRevenue);
-    } else {
-      // Fallback: Calculate net revenue after platform fee (10%)
-      totalRevenue = orders
-        .filter(o => o.status === 'completed')
-        .reduce((sum, o) => {
-          const grossAmount = parseFloat(o.total_amount) || 0;
-          const platformFee = grossAmount * 0.10; // 10% platform fee
-          const netAmount = grossAmount - platformFee;
-          return sum + netAmount;
-        }, 0);
-      console.log('Using calculated revenue:', totalRevenue);
-    }
+    // Fallback: Check if the OrderStatus component would display "Pending"
+    // This mimics the logic from OrderStatus component
+    const statusOptions = [
+      { value: 'pending', label: 'Pending', color: '#ffc107' },
+      { value: 'in_progress', label: 'In Progress', color: '#007bff' },
+      { value: 'completed', label: 'Completed', color: '#28a745' },
+      { value: 'delivered', label: 'Delivered', color: '#6f42c1' },
+      { value: 'cancelled', label: 'Cancelled', color: '#dc3545' }
+    ];
+    
+    const currentStatus = statusOptions.find(s => s.value === normalizedStatus);
+    
+    // If no exact match found in statusOptions, it will fall back to the first option (pending)
+    // So if the status is not found, it means OrderStatus will show "Pending"
+    const wouldShowPending = !currentStatus;
+    
+    
+    return exactMatches || wouldShowPending;
+  };
 
-    return { total, pending, inProgress, completed, totalRevenue };
+  const getOrderStats = () => {
+    console.log('Current orderStats state:', orderStats);
+    console.log('Current orders on page:', orders.length);
+    
+    // Always use the comprehensive stats from all orders
+    // Only use fallback if we have no stats at all and no orders
+    const useFallback = orderStats.total === 0 && orders.length === 0;
+    
+    let stats;
+    if (useFallback) {
+      console.log('Using fallback stats - no data available');
+      stats = {
+        total: 0,
+        pending: 0,
+        inProgress: 0,
+        completed: 0,
+        totalRevenue: 0
+      };
+    } else {
+      // Use the comprehensive stats from all orders
+      stats = {
+        total: orderStats.total,
+        pending: orderStats.pending,
+        inProgress: orderStats.inProgress,
+        completed: orderStats.completed,
+        totalRevenue: orderStats.totalRevenue
+      };
+    }
+    
+    // Try to get revenue from dashboard data first (if available and more accurate)
+    if (dashboardData?.stats?.earnings_summary?.total_earnings) {
+      stats.totalRevenue = dashboardData.stats.earnings_summary.total_earnings;
+      console.log('Using earnings_summary total_earnings:', stats.totalRevenue);
+    } else if (dashboardData?.stats?.analytics?.total_earnings) {
+      stats.totalRevenue = dashboardData.stats.analytics.total_earnings;
+      console.log('Using analytics total_earnings:', stats.totalRevenue);
+    }
+    
+    console.log('Final stats being returned (from all orders):', stats);
+    return stats;
   };
 
   const stats = getOrderStats();
@@ -322,7 +481,33 @@ const SellerOrders = ({ dashboardData }) => {
           </div>
         </div>
       ) : (
-        <div className="orders-grid">
+        <>
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button 
+                className="pagination-btn"
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              
+              <div className="pagination-info">
+                Page {currentPage} of {totalPages}
+              </div>
+              
+              <button 
+                className="pagination-btn"
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
+
+          <div className="orders-grid">
           {orders.map((order) => (
             <div key={order.id} className="order-card">
               <div className="order-card-header">
@@ -381,7 +566,7 @@ const SellerOrders = ({ dashboardData }) => {
                   >
                     View Details
                   </button>
-                  {order.status === 'pending' && (
+                  {shouldShowStartWorkButton(order) && (
                     <button 
                       className="btn btn-success"
                       onClick={() => handleStatusChange(order.id, 'in_progress')}
@@ -389,7 +574,7 @@ const SellerOrders = ({ dashboardData }) => {
                       Start Work
                     </button>
                   )}
-                  {order.status === 'in_progress' && (
+                  {order.status?.toString().toLowerCase().trim() === 'in_progress' && (
                     <button 
                       className="btn btn-success"
                       onClick={() => handleStatusChange(order.id, 'completed')}
@@ -401,7 +586,8 @@ const SellerOrders = ({ dashboardData }) => {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        </>
       )}
 
       {/* Order Details Modal */}
