@@ -130,7 +130,7 @@ const ServiceCard = ({ service, onEdit, onDelete, onViewDetails }) => {
         </button>
         {!isSeller && (
           <button className="btn btn-secondary" onClick={handleOrderNow}>
-            Order Now
+            Buy Now
           </button>
         )}
       </div>

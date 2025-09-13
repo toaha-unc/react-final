@@ -409,7 +409,7 @@ const ServiceDetails = ({ serviceId, onBack, onEdit, onDelete }) => {
               <div className="order-actions">
                 {user ? (
                   <button className="btn btn-primary order-btn" onClick={handleOrderNow}>
-                    Order Now
+                    Buy Now
                   </button>
                 ) : (
                   <button 
