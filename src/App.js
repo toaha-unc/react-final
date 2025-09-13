@@ -21,6 +21,9 @@ import Recommendations from './components/Recommendations';
 import BuyerProfile from './components/BuyerProfile';
 import SellerProfile from './components/SellerProfile';
 import Reviews from './components/Reviews';
+import PaymentSuccess from './components/PaymentSuccess';
+import PaymentFailed from './components/PaymentFailed';
+import TestPayment from './components/TestPayment';
 import './App.css';
 
 // Profile component that shows appropriate profile based on user role
@@ -204,6 +207,18 @@ function App() {
               element={<OrderForm />} 
             />
             <Route 
+              path="/test-service/:serviceId" 
+              element={<ServiceDetails serviceId={window.location.pathname.split('/').pop()} />} 
+            />
+            <Route 
+              path="/test-order-form/:serviceId" 
+              element={<OrderForm />} 
+            />
+            <Route 
+              path="/test-payment/:serviceId" 
+              element={<TestPayment />} 
+            />
+            <Route 
               path="/notifications" 
               element={
                 <ProtectedRoute>
@@ -226,6 +241,18 @@ function App() {
                   <Reviews />
                 </ProtectedRoute>
               } 
+            />
+            <Route 
+              path="/payment-success" 
+              element={<PaymentSuccess />} 
+            />
+            <Route 
+              path="/payment-failed" 
+              element={<PaymentFailed />} 
+            />
+            <Route 
+              path="/payment-cancelled" 
+              element={<PaymentFailed />} 
             />
           </Routes>
         </div>

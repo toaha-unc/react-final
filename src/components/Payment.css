@@ -123,9 +123,11 @@
   background: #ffffff;
 }
 
-.method-option input[type="radio"]:checked + label {
+.method-option input[type="radio"]:checked + label,
+.method-option.selected {
   border-color: #000000;
   background: #f8f9fa;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
 .method-option label:hover {
@@ -147,6 +149,19 @@
 .method-description {
   color: #666666;
   font-size: 0.9rem;
+}
+
+.method-features {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.method-features .feature {
+  font-size: 0.875rem;
+  color: #38a169;
+  font-weight: 500;
 }
 
 /* SSLCommerz Payment Methods */

@@ -380,6 +380,56 @@ const OrderForm = ({ onSuccess, onCancel }) => {
     document.body.removeChild(form);
   };
 
+  const submitFormToSSLCommerz = (url, formData) => {
+    try {
+      console.log('=== SSLCommerz Form Submission Debug ===');
+      console.log('URL:', url);
+      console.log('Form data keys:', Object.keys(formData));
+      console.log('Form data values:', formData);
+      
+      // Validate required data
+      if (!url) {
+        console.error('No URL provided for form submission');
+        setError('Payment URL not available. Please try again.');
+        return;
+      }
+      
+      if (!formData || Object.keys(formData).length === 0) {
+        console.error('No form data provided for submission');
+        setError('Payment data not available. Please try again.');
+        return;
+      }
+      
+      // Create a form element
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = url;
+      form.target = '_self'; // Submit in the same window
+      
+      // Add all form fields
+      Object.keys(formData).forEach(key => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = formData[key];
+        form.appendChild(input);
+        console.log(`Added field: ${key} = ${formData[key]}`);
+      });
+      
+      // Add form to DOM and submit
+      document.body.appendChild(form);
+      console.log('Form created and added to DOM. Submitting...');
+      form.submit();
+      
+      // Clean up
+      document.body.removeChild(form);
+      console.log('Form submitted successfully');
+    } catch (error) {
+      console.error('Error submitting form to SSLCommerz:', error);
+      setError('Failed to redirect to payment page. Please try again.');
+    }
+  };
+
   const initiatePaymentDirectly = async (order) => {
     try {
       console.log('OrderForm - Initiating payment directly for order:', order.id);
@@ -395,13 +445,24 @@ const OrderForm = ({ onSuccess, onCancel }) => {
       const data = response.data;
 
       console.log('Payment initiation response:', data);
+      console.log('Payment initiation response keys:', Object.keys(data));
+      console.log('Has redirect_url:', !!data.redirect_url);
+      console.log('Has form_data:', !!data.form_data);
+      console.log('redirect_url value:', data.redirect_url);
+      console.log('form_data value:', data.form_data);
 
       if (data.redirect_url) {
         console.log('Payment data received, redirect URL:', data.redirect_url);
         
-        // Redirect to SSLCommerz payment page
-        console.log('Redirecting to SSLCommerz payment page...');
-        window.location.href = data.redirect_url;
+        // Check if we have form data (fallback method) or direct URL (preferred method)
+        if (data.form_data && Object.keys(data.form_data).length > 0) {
+          console.log('Form data received, submitting form to SSLCommerz...');
+          submitFormToSSLCommerz(data.redirect_url, data.form_data);
+        } else {
+          console.log('Direct URL received, redirecting to SSLCommerz payment page...');
+          // Direct redirect to SSLCommerz payment page
+          window.location.href = data.redirect_url;
+        }
       } else {
         console.error('No redirect URL in payment response:', data);
         setError('Payment initialization failed. Please try again.');

@@ -52,6 +52,19 @@
   margin-bottom: 30px;
 }
 
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.retry-info {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #888;
+}
+
 .order-form-header {
   text-align: center;
   margin-bottom: 40px;

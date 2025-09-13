@@ -1,13 +1,13 @@
-.payment-success-container {
+.payment-failed-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   padding: 20px;
 }
 
-.payment-success-card {
+.payment-failed-card {
   background: white;
   border-radius: 16px;
   padding: 40px;
@@ -17,40 +17,64 @@
   width: 100%;
 }
 
-.success-icon {
+.failed-icon {
   margin-bottom: 24px;
   display: flex;
   justify-content: center;
 }
 
-.success-title {
+.failed-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #10B981;
+  color: #EF4444;
   margin-bottom: 16px;
 }
 
-.success-message {
+.failed-message {
   font-size: 1.1rem;
   color: #6B7280;
   margin-bottom: 24px;
   line-height: 1.6;
 }
 
-.success-details {
-  background: #F3F4F6;
+.failed-details {
+  background: #FEF2F2;
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 32px;
+  border: 1px solid #FECACA;
 }
 
-.success-details p {
+.failed-details p {
   margin: 8px 0;
   color: #374151;
 }
 
+.button-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.try-again-btn {
+  background: #3B82F6;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.try-again-btn:hover {
+  background: #2563EB;
+}
+
 .go-home-btn {
-  background: #10B981;
+  background: #6B7280;
   color: white;
   border: none;
   padding: 12px 32px;
@@ -62,15 +86,24 @@
 }
 
 .go-home-btn:hover {
-  background: #059669;
+  background: #4B5563;
 }
 
 @media (max-width: 640px) {
-  .payment-success-card {
+  .payment-failed-card {
     padding: 24px;
   }
   
-  .success-title {
+  .failed-title {
     font-size: 2rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .try-again-btn,
+  .go-home-btn {
+    width: 100%;
   }
 }

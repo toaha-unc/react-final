@@ -2,12 +2,18 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://django-final.vercel.app/api';
 
+// CORS proxy for development/testing
+const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+const USE_CORS_PROXY = false; // Set to true if CORS issues persist
+
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: false, // Disable credentials to avoid CORS issues
+  timeout: 30000, // 30 second timeout
 });
 
 // Request interceptor to add auth token

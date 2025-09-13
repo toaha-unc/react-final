@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './PaymentSuccess.css';
+import './PaymentFailed.css';
 
-const PaymentSuccess = () => {
+const PaymentFailed = () => {
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(5);
 
@@ -25,10 +25,14 @@ const PaymentSuccess = () => {
     navigate('/');
   };
 
+  const handleTryAgain = () => {
+    navigate(-1); // Go back to previous page
+  };
+
   return (
-    <div className="payment-success-container">
-      <div className="payment-success-card">
-        <div className="success-icon">
+    <div className="payment-failed-container">
+      <div className="payment-failed-card">
+        <div className="failed-icon">
           <svg
             width="64"
             height="64"
@@ -36,9 +40,9 @@ const PaymentSuccess = () => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="12" cy="12" r="10" fill="#10B981" />
+            <circle cx="12" cy="12" r="10" fill="#EF4444" />
             <path
-              d="M8 12l2 2 4-4"
+              d="M15 9l-6 6M9 9l6 6"
               stroke="white"
               strokeWidth="2"
               strokeLinecap="round"
@@ -47,22 +51,27 @@ const PaymentSuccess = () => {
           </svg>
         </div>
         
-        <h1 className="success-title">Payment Successful!</h1>
-        <p className="success-message">
-          Your payment has been processed successfully. You will receive a confirmation email shortly.
+        <h1 className="failed-title">Payment Failed</h1>
+        <p className="failed-message">
+          Unfortunately, your payment could not be processed. This could be due to insufficient funds, incorrect card details, or a technical issue.
         </p>
         
-        <div className="success-details">
-          <p>Thank you for your purchase!</p>
+        <div className="failed-details">
+          <p>Please try again or contact support if the problem persists.</p>
           <p>Redirecting to homepage in {countdown} seconds...</p>
         </div>
         
-        <button onClick={handleGoHome} className="go-home-btn">
-          Go to Homepage
-        </button>
+        <div className="button-group">
+          <button onClick={handleTryAgain} className="try-again-btn">
+            Try Again
+          </button>
+          <button onClick={handleGoHome} className="go-home-btn">
+            Go to Homepage
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default PaymentSuccess;
+export default PaymentFailed;
