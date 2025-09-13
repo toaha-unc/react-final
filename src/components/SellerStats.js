@@ -64,7 +64,7 @@ const SellerStats = ({ stats, earnings, analytics, loading, error, onRefresh }) 
     monthly_earnings: stats.analytics?.earnings_this_month || stats.earnings_summary?.this_month || 0,
     total_orders: stats.analytics?.total_orders || 0,
     completed_orders: stats.analytics?.completed_orders || 0,
-    pending_orders: stats.analytics?.total_orders - stats.analytics?.completed_orders || 0,
+    pending_orders: stats.analytics?.pending_orders || 0,
     total_services: stats.analytics?.total_services || 0,
     active_services: stats.analytics?.active_services || 0,
     average_rating: stats.analytics?.average_rating || 0,

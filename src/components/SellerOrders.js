@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ordersAPI } from '../services/api';
+import { ordersAPI, dashboardAPI, statsAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import OrderStatus from './OrderStatus';
 import './SellerOrders.css';
@@ -48,7 +48,29 @@ const SellerOrders = ({ dashboardData }) => {
     try {
       console.log('Fetching order stats for seller:', user?.id);
       
-      // Get all orders by fetching all pages
+      // Try to get stats from the dedicated order-stats endpoint first
+      try {
+        const response = await statsAPI.getOrderStats();
+        console.log('Order stats API response:', response.data);
+        
+        if (response.data) {
+          const stats = {
+            total: response.data.total_orders || 0,
+            pending: response.data.pending_orders || 0,
+            inProgress: response.data.in_progress_orders || 0,
+            completed: response.data.completed_orders || 0,
+            totalRevenue: response.data.net_revenue || 0
+          };
+          
+          console.log('Using order stats API data:', stats);
+          setOrderStats(stats);
+          return;
+        }
+      } catch (apiError) {
+        console.log('Order stats API failed, falling back to local calculation:', apiError.message);
+      }
+      
+      // Fallback: Get all orders by fetching all pages
       let allOrders = [];
       let currentPage = 1;
       let hasMorePages = true;
@@ -81,7 +103,7 @@ const SellerOrders = ({ dashboardData }) => {
       if (allOrders.length > 0) {
         const stats = {
           total: allOrders.length,
-          pending: allOrders.filter(o => shouldShowStartWorkButton(o)).length,
+          pending: allOrders.filter(o => o.status?.toString().toLowerCase().trim() === 'pending').length,
           inProgress: allOrders.filter(o => o.status?.toString().toLowerCase().trim() === 'in_progress').length,
           completed: allOrders.filter(o => o.status?.toString().toLowerCase().trim() === 'completed').length,
           totalRevenue: 0
@@ -326,48 +348,68 @@ const SellerOrders = ({ dashboardData }) => {
   };
 
   const getOrderStats = () => {
-    console.log('Current orderStats state:', orderStats);
-    console.log('Current orders on page:', orders.length);
+    console.log('=== ORDER STATS DEBUG ===');
+    console.log('Dashboard data:', dashboardData);
+    console.log('OrderStats state:', orderStats);
+    console.log('Orders on page:', orders.length);
     
-    // Always use the comprehensive stats from all orders
-    // Only use fallback if we have no stats at all and no orders
-    const useFallback = orderStats.total === 0 && orders.length === 0;
-    
-    let stats;
-    if (useFallback) {
-      console.log('Using fallback stats - no data available');
-      stats = {
-        total: 0,
-        pending: 0,
-        inProgress: 0,
-        completed: 0,
-        totalRevenue: 0
-      };
-    } else {
-      // Use the comprehensive stats from all orders
-      stats = {
-        total: orderStats.total,
-        pending: orderStats.pending,
-        inProgress: orderStats.inProgress,
-        completed: orderStats.completed,
-        totalRevenue: orderStats.totalRevenue
+    // Prioritize local orderStats state (fetched from order-stats API)
+    if (orderStats.total !== undefined) {
+      console.log('Using local orderStats state');
+      return {
+        total: orderStats.total || 0,
+        pending: orderStats.pending || 0,
+        inProgress: orderStats.inProgress || 0,
+        completed: orderStats.completed || 0,
+        totalRevenue: orderStats.totalRevenue || 0
       };
     }
     
-    // Try to get revenue from dashboard data first (if available and more accurate)
-    if (dashboardData?.stats?.earnings_summary?.total_earnings) {
-      stats.totalRevenue = dashboardData.stats.earnings_summary.total_earnings;
-      console.log('Using earnings_summary total_earnings:', stats.totalRevenue);
-    } else if (dashboardData?.stats?.analytics?.total_earnings) {
-      stats.totalRevenue = dashboardData.stats.analytics.total_earnings;
-      console.log('Using analytics total_earnings:', stats.totalRevenue);
+    // Fallback to dashboard analytics data
+    const analytics = dashboardData?.stats?.analytics || dashboardData?.analytics;
+    console.log('Analytics found:', analytics);
+    
+    if (analytics && analytics.total_orders !== undefined) {
+      console.log('Using backend analytics data');
+      return {
+        total: analytics.total_orders || 0,
+        pending: analytics.pending_orders || 0,
+        inProgress: analytics.in_progress_orders || 0,
+        completed: analytics.completed_orders || 0,
+        totalRevenue: analytics.total_earnings || 0
+      };
     }
     
-    console.log('Final stats being returned (from all orders):', stats);
-    return stats;
+    console.log('No data available, returning zeros');
+    return {
+      total: 0,
+      pending: 0,
+      inProgress: 0,
+      completed: 0,
+      totalRevenue: 0
+    };
   };
 
   const stats = getOrderStats();
+
+  const handleForceUpdateAnalytics = async () => {
+    try {
+      console.log('Force updating analytics...');
+      const response = await dashboardAPI.forceUpdateAnalytics();
+      console.log('Analytics update response:', response.data);
+      
+      if (response.data.updated) {
+        alert(`Analytics updated! Old: ${response.data.old_total_orders}, New: ${response.data.new_total_orders}`);
+        // Refresh the dashboard data
+        window.location.reload();
+      } else {
+        alert('Failed to update analytics');
+      }
+    } catch (error) {
+      console.error('Error updating analytics:', error);
+      alert('Error updating analytics: ' + error.message);
+    }
+  };
 
   if (loading) {
     return (

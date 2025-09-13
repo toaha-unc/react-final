@@ -7,6 +7,7 @@ import SellerOrders from './SellerOrders';
 import SellerReviews from './SellerReviews';
 import SellerProfile from './SellerProfile';
 import PaymentHistory from './PaymentHistory';
+import RevenueTest from './RevenueTest';
 import './SellerDashboard.css';
 
 const SellerDashboard = () => {
@@ -31,23 +32,27 @@ const SellerDashboard = () => {
       setLoading(true);
       setError(null);
 
-      const [statsResponse, earningsResponse, analyticsResponse] = await Promise.allSettled([
-        dashboardAPI.getSellerStats(),
-        dashboardAPI.getSellerEarnings(),
-        dashboardAPI.getSellerAnalytics()
-      ]);
-
-      const dashboardData = {
-        stats: statsResponse.status === 'fulfilled' ? statsResponse.value.data : null,
-        earnings: earningsResponse.status === 'fulfilled' ? earningsResponse.value.data : null,
-        analytics: analyticsResponse.status === 'fulfilled' ? analyticsResponse.value.data : null
-      };
+      console.log('Fetching dashboard data...');
+      const response = await dashboardAPI.getSellerStats();
+      console.log('API Response:', response);
+      console.log('Response data:', response.data);
       
-      console.log('Dashboard data fetched:', dashboardData);
-      setDashboardData(dashboardData);
+      if (response.data) {
+        const dashboardData = {
+          stats: response.data,
+          analytics: response.data.analytics || null,
+          earnings: response.data.earnings_summary || null
+        };
+        
+        console.log('Setting dashboard data:', dashboardData);
+        setDashboardData(dashboardData);
+      } else {
+        console.error('No data received from API');
+        setError('No data received from server');
+      }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      setError('Failed to load dashboard data. Please try again.');
+      setError(`Failed to load dashboard data: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -58,7 +63,8 @@ const SellerDashboard = () => {
     { id: 'orders', label: 'Orders', icon: '📦' },
     { id: 'reviews', label: 'Reviews', icon: '⭐' },
     { id: 'payments', label: 'Payments', icon: '💳' },
-    { id: 'profile', label: 'Profile', icon: '👤' }
+    { id: 'profile', label: 'Profile', icon: '👤' },
+    { id: 'debug', label: 'Debug', icon: '🐛' }
   ];
 
   const renderActiveTab = () => {
@@ -73,6 +79,8 @@ const SellerDashboard = () => {
         return <PaymentHistory />;
       case 'profile':
         return <SellerProfile />;
+      case 'debug':
+        return <RevenueTest />;
       default:
         return null;
     }

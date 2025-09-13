@@ -110,6 +110,7 @@ export const dashboardAPI = {
   getSellerStats: () => api.get('/seller/dashboard-stats/'),
   getSellerEarnings: () => api.get('/seller/earnings/'),
   getSellerAnalytics: () => api.get('/seller/analytics/'),
+  forceUpdateAnalytics: () => api.post('/seller/force-update-analytics/'),
   getBuyerStats: () => api.get('/buyer/dashboard-stats/?update=true'),
   getBuyerAnalytics: () => api.get('/buyer/analytics/'),
   getBuyerOrderHistory: () => api.get('/buyer/order-history/'),
