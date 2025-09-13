@@ -229,14 +229,8 @@ const OrderList = ({ onViewOrder }) => {
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Ordered:</span>
-                      <span className="detail-value">{formatDate(order.created_at)}</span>
+                      <span className="detail-value">{formatDate(order.placed_at)}</span>
                     </div>
-                    {order.delivery_date && (
-                      <div className="detail-item">
-                        <span className="detail-label">Delivery:</span>
-                        <span className="detail-value">{formatDate(order.delivery_date)}</span>
-                      </div>
-                    )}
                   </div>
 
                   <div className="order-parties">

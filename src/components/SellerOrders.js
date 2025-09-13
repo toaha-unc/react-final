@@ -330,14 +330,8 @@ const SellerOrders = () => {
                   </div>
                   <div className="detail-item">
                     <span className="detail-label">Ordered:</span>
-                    <span className="detail-value">{formatDate(order.created_at)}</span>
+                    <span className="detail-value">{formatDate(order.placed_at)}</span>
                   </div>
-                  {order.delivery_date && (
-                    <div className="detail-item">
-                      <span className="detail-label">Delivery:</span>
-                      <span className="detail-value">{formatDate(order.delivery_date)}</span>
-                    </div>
-                  )}
                 </div>
 
                 <div className="buyer-info">
@@ -416,9 +410,7 @@ const SellerOrders = () => {
               
               <div className="order-detail-section">
                 <h4>Order Timeline</h4>
-                <p><strong>Ordered:</strong> {formatDate(selectedOrder.created_at)}</p>
-                <p><strong>Delivery Date:</strong> {formatDate(selectedOrder.delivery_date)}</p>
-                <p><strong>Last Updated:</strong> {formatDate(selectedOrder.updated_at)}</p>
+                <p><strong>Ordered:</strong> {formatDate(selectedOrder.placed_at)}</p>
               </div>
               
               {selectedOrder.requirements && (

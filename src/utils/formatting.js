@@ -60,7 +60,15 @@ export const formatDate = (dateString) => {
   }
   
   try {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const date = new Date(dateString);
+    
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      console.warn('Invalid date string:', dateString);
+      return 'N/A';
+    }
+    
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -69,7 +77,7 @@ export const formatDate = (dateString) => {
     });
   } catch (error) {
     console.warn('Error formatting date:', dateString, error);
-    return 'Invalid Date';
+    return 'N/A';
   }
 };
 
@@ -84,7 +92,15 @@ export const formatShortDate = (dateString) => {
   }
   
   try {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const date = new Date(dateString);
+    
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      console.warn('Invalid date string:', dateString);
+      return 'N/A';
+    }
+    
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -93,7 +109,7 @@ export const formatShortDate = (dateString) => {
     });
   } catch (error) {
     console.warn('Error formatting short date:', dateString, error);
-    return 'Invalid Date';
+    return 'N/A';
   }
 };
 

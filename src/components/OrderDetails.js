@@ -225,8 +225,8 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
               <h3>Order Information</h3>
               <div className="info-items">
                 <div className="info-item">
-                  <span className="info-label">Order Date:</span>
-                  <span className="info-value">{formatDate(order.created_at)}</span>
+                  <span className="info-label">Ordered:</span>
+                  <span className="info-value">{formatDate(order.placed_at)}</span>
                 </div>
                 <div className="info-item">
                   <span className="info-label">Total Amount:</span>
@@ -236,12 +236,6 @@ const OrderDetails = ({ orderId, onBack, onEdit }) => {
                   <span className="info-label">Quantity:</span>
                   <span className="info-value">{order.quantity}</span>
                 </div>
-                {order.delivery_date && (
-                  <div className="info-item">
-                    <span className="info-label">Delivery Date:</span>
-                    <span className="info-value">{formatDate(order.delivery_date)}</span>
-                  </div>
-                )}
               </div>
             </div>
 
