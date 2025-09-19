@@ -214,7 +214,7 @@
   color: white;
 }
 
-.btn-secondary:hover:not(:disabled) {
+.edit-review-modal .btn-secondary:hover:not(:disabled) {
   background-color: #5a6268;
 }
 
@@ -223,7 +223,7 @@
   color: white;
 }
 
-.btn-primary:hover:not(:disabled) {
+.edit-review-modal .btn-primary:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
